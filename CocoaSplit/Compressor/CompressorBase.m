@@ -16,7 +16,9 @@
 {
     if (self = [super init])
     {
-        
+        _queueSemaphore = dispatch_semaphore_create(0);
+        _compressQueue = [NSMutableArray array];
+        _reset_flag = NO;
         self.errored = NO;
         
         self.name = [@"" mutableCopy];
@@ -78,6 +80,10 @@
 
 
 
+-(void)internal_reset
+{
+    [self reset];
+}
 
 -(void) reset
 {
@@ -111,10 +117,123 @@
     return self;
 }
 
+-(bool)queueFramedata:(CapturedFrameData *)frameData
+{
+    if (!_consumerThread)
+    {
+        [self startConsumerThread];
+    }
+    
+    @synchronized (self) {
+        [_compressQueue addObject:frameData];
+        dispatch_semaphore_signal(_queueSemaphore);
+    }
+    
+    return YES;
+}
+
+
+-(void)clearFrameQueue
+{
+    @synchronized (self) {
+        [_compressQueue removeAllObjects];
+    }
+}
+
+
+-(CapturedFrameData *)consumeframeData
+{
+    CapturedFrameData *retData = nil;
+    @synchronized (self) {
+        
+        
+        if (_compressQueue.count > 0)
+        {
+            retData = [_compressQueue objectAtIndex:0];
+            [_compressQueue removeObjectAtIndex:0];
+        }
+    }
+    return retData;
+}
+
+
+-(void)startConsumerThread
+{
+    if (!_consumerThread)
+    {
+        _consumerThread = dispatch_queue_create("Compressor consumer", DISPATCH_QUEUE_SERIAL);
+        dispatch_async(_consumerThread, ^{
+            
+            while (1)
+            {
+                @autoreleasepool {
+                    @synchronized (self) {
+                        
+                        if (self->_reset_flag)
+                        {
+                            [self clearFrameQueue];
+                            [self internal_reset];
+                        }
+                    }
+                    CapturedFrameData *useData = [self consumeframeData];
+                    if (!useData)
+                    {
+                        dispatch_semaphore_wait(self->_queueSemaphore, DISPATCH_TIME_FOREVER);
+                    } else {
+                        [self real_compressFrame:useData];
+
+                    }
+                }
+            }
+        });
+    }
+}
 
 
 
--(bool) compressFrame:(CapturedFrameData *)imageBuffer
+-(bool)compressFrame:(CapturedFrameData *)frameData
+{
+    if (![self hasOutputs])
+    {
+        return NO;
+    }
+    
+    
+    if ([self needsSetup] && !self.errored)
+    {
+        BOOL setupOK;
+        
+        setupOK = [self setupCompressor:frameData];
+        
+        if (!setupOK)
+        {
+            self.errored = YES;
+            return NO;
+        }
+    }
+    
+    
+    
+    [self reconfigureCompressor];
+    
+    /*
+    if (frameData.videoFrame)
+    {
+        CVPixelBufferRetain(frameData.videoFrame);
+    }*/
+
+    [self queueFramedata:frameData];
+    return YES;
+}
+
+
+
+-(void)reconfigureCompressor
+{
+    return;
+}
+
+-(bool) real_compressFrame:(CapturedFrameData *)imageBuffer
 {
     return YES;
 }

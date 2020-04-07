@@ -103,7 +103,7 @@
     return @"NewTek NDI";
 }
 
--(NDIlib_source_t *)current_ndi_sources:(uint32_t *)out_count
+-(NDIlib_source_t *)current_ndi_sources:(uint32_t *)out_count asyncBloc:(void (^)(NDIlib_source_t *sources, uint32_t srcCount))asyncBlock
 {
     NDIlib_find_instance_t finder = NULL;
     if (!_ndi_dispatch)
@@ -118,6 +118,29 @@
     }
     uint32_t source_count = 0;
     const NDIlib_source_t *sources = _ndi_dispatch->NDIlib_find_get_current_sources(finder, &source_count);
+    if (!source_count && asyncBlock)
+    {
+        NDIlib_v3 *dispatcher = _ndi_dispatch;
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                //This is probably a bad idea...
+            int tryCnt = 0;
+            while(tryCnt < 10 && dispatcher)
+            {
+                uint32_t retry_src_cnt = 0;
+                dispatcher->NDIlib_find_wait_for_sources(finder, 100);
+                const NDIlib_source_t *retrySrcs = dispatcher->NDIlib_find_get_current_sources(finder, &retry_src_cnt);
+                if (retry_src_cnt > 0)
+                {
+                    asyncBlock(retrySrcs, retry_src_cnt);
+                    break;
+                }
+                tryCnt++;
+            }
+        });
+        sources = _ndi_dispatch->NDIlib_find_get_current_sources(finder, &source_count);
+
+    }
     *out_count = source_count;
     return sources;
 }
@@ -128,16 +151,8 @@
 
     uint32_t source_count = 0;
     
-    const NDIlib_source_t *sources = [self current_ndi_sources:&source_count];
-    
-
-    if (!_ndi_dispatch)
-    {
-        return nil;
-    }
-    
+    const NDIlib_source_t *sources = [self current_ndi_sources:&source_count asyncBloc:nil];
     NSMutableArray *ret = [NSMutableArray array];
-    
     for (int i=0; i < source_count; i++)
     {
         NDIlib_source_t ndi_src = sources[i];
@@ -236,57 +251,82 @@
 
 -(NDIlib_source_t)find_ndi_source:(NSString *)forName
 {
-    uint32_t source_count = 0;
-    const NDIlib_source_t *sources = [self current_ndi_sources:&source_count];
-
-    for (int i = 0; i < source_count; i++)
+    if (forName)
     {
-        NDIlib_source_t ndi_src = sources[i];
-        if (!strncmp(ndi_src.p_ndi_name, forName.UTF8String, strlen(ndi_src.p_ndi_name)))
+        uint32_t source_count = 0;
+        const NDIlib_source_t *sources = [self current_ndi_sources:&source_count asyncBloc:nil];
+        
+        for (int i = 0; i < source_count; i++)
         {
-            return ndi_src;
+            NDIlib_source_t ndi_src = sources[i];
+            if (!strncmp(ndi_src.p_ndi_name, forName.UTF8String, strlen(ndi_src.p_ndi_name)))
+            {
+                return ndi_src;
+            }
         }
     }
-    
     return (NDIlib_source_t){0};
     
 }
 
 
+-(void)setupNdiSource:(CSNDISource *)ndiSource
+{
+    self.captureName = ndiSource.name;
+    CSNDIReceiver *newRecv = [[CSNDIReceiver alloc] initWithSource:ndiSource];
+    @synchronized(self)
+    {
+        if (!_video_thread)
+        {
+            _video_thread = dispatch_queue_create("NDI Video Capture Delegate", DISPATCH_QUEUE_SERIAL);
+        }
+        
+        if (!_audio_thread)
+        {
+            _audio_thread = dispatch_queue_create("NDI Audio Capture Delegate", DISPATCH_QUEUE_SERIAL);
+        }
+        
+        if (_current_receiver)
+        {
+            [_current_receiver stopCapture];
+        }
+        
+        _current_receiver = newRecv;
+        [_current_receiver registerVideoDelegate:self withQueue:_video_thread];
+        [_current_receiver registerAudioDelegate:self withQueue:_audio_thread];
+        [_current_receiver startCapture];
+    }
+    
+}
+
 -(void)setActiveVideoDevice:(CSAbstractCaptureDevice *)activeVideoDevice
 {
     [super setActiveVideoDevice:activeVideoDevice];
-
-    CSNDISource *ndiSource = activeVideoDevice.captureDevice;
-    
-    if (ndiSource)
+    if (activeVideoDevice)
     {
-        self.captureName = ndiSource.name;
+        CSNDISource *ndiSource = activeVideoDevice.captureDevice;
         
-        CSNDIReceiver *newRecv = [[CSNDIReceiver alloc] initWithSource:ndiSource];
-        @synchronized(self)
+        
+        if (ndiSource)
         {
-            if (!_video_thread)
-            {
-                _video_thread = dispatch_queue_create("NDI Video Capture Delegate", DISPATCH_QUEUE_SERIAL);
-            }
-            
-            if (!_audio_thread)
-            {
-                _audio_thread = dispatch_queue_create("NDI Audio Capture Delegate", DISPATCH_QUEUE_SERIAL);
-            }
-            
-            if (_current_receiver)
-            {
-                [_current_receiver stopCapture];
-            }
-            
-            _current_receiver = newRecv;
-            [_current_receiver registerVideoDelegate:self withQueue:_video_thread];
-            [_current_receiver registerAudioDelegate:self withQueue:_audio_thread];
-            [_current_receiver startCapture];
-
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setupNdiSource:ndiSource];
+            });
+            return;
         }
+    } else if (self.savedUniqueID) {
+        uint32_t srcCnt = 0;
+        NDIlib_source_t *srcs = [self current_ndi_sources:&srcCnt asyncBloc:^(NDIlib_source_t *sources, uint32_t srcCount) {
+            NDIlib_source_t ndiSrc = [self find_ndi_source:self.savedUniqueID];
+            if (ndiSrc.p_ndi_name)
+            {
+                CSNDISource *ndiSource = [[CSNDISource alloc] initWithSource:ndiSrc];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self setDeviceForUniqueID:self.savedUniqueID];
+                });
+            }
+            
+        }];
     }
 }
 
@@ -317,6 +357,7 @@
 {
     [self deregisterPCMOutput];
 }
+
 
 
 @end

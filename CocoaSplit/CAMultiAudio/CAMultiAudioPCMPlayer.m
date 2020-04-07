@@ -226,7 +226,7 @@
 -(void)dealloc
 {
     
-    [self flush];
+    //[self flush];
     if (_pendingTimer)
     {
         dispatch_source_cancel(_pendingTimer);

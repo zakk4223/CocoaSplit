@@ -73,7 +73,7 @@
 }
 
 
--(bool)compressFrame:(CapturedFrameData *)imageBuffer
+-(bool)real_compressFrame:(CapturedFrameData *)imageBuffer
 {
 
     if (![self hasOutputs])

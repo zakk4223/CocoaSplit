@@ -2622,7 +2622,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     }
     self.liveLayout.name = @"Live Layout";
     self.stagingLayout.name = @"Staging Layout";
-    [self.liveLayout restoreSourceList:nil];
+    //[self.liveLayout restoreSourceList:nil];
     [self setupMainRecorder];
 }
 

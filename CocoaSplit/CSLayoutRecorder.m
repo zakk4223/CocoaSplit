@@ -536,7 +536,6 @@
     }
     */
     
-    start_t = [CaptureController.sharedCaptureController mach_time_seconds];
 
     if (newFrame && self.compressors && self.compressors.count > 0)
     {
@@ -565,6 +564,8 @@
         newData.videoFrame = newFrame;
         
         int used_compressor_count = 0;
+        start_t = [CaptureController.sharedCaptureController mach_time_seconds];
+
         NSMutableDictionary *useCompressors = self.compressors.copy;
         
         for(id cKey in useCompressors)
@@ -573,8 +574,16 @@
             id <VideoCompressor> compressor;
             compressor = useCompressors[cKey];
             CapturedFrameData *newFrameData = newData.copy;
+            double c_start = [CaptureController.sharedCaptureController mach_time_seconds];
             [compressor compressFrame:newFrameData];
-
+            double c_end = [CaptureController.sharedCaptureController mach_time_seconds];
+            double c_elapsed = c_end - c_start;
+            
+            if (c_elapsed > 1.0f/60.0f)
+            {
+                NSLog(@"COMPRESSOR %@ TOOK %f %@", compressor, c_elapsed, self.layout.name);
+            }
+            
             if ([compressor hasOutputs])
             {
                 used_compressor_count++;
@@ -582,9 +591,9 @@
         }
         end_t = [CaptureController.sharedCaptureController mach_time_seconds];
         elapsed_t = end_t - start_t;
-        //if (elapsed_t > 1.0f/60.0f)
+        if (elapsed_t > 1.0f/60.0f)
         {
-            //NSLog(@"COMPRESSOR STUFF TOOK %f %@", elapsed_t, self.layout.name);
+            NSLog(@"COMPRESSOR STUFF TOOK %f %@", elapsed_t, self.layout.name);
         }
         
         CVPixelBufferRelease(newFrame);

@@ -88,7 +88,10 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 }
 
 
--(void) reset
+
+
+
+-(void) internal_reset
 {
     
     _resetPending = YES;
@@ -126,7 +129,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 }
 
 
--(bool)compressFrame:(CapturedFrameData *)frameData
+-(bool)real_compressFrame:(CapturedFrameData *)frameData
 {
     
     if (_resetPending)
@@ -193,9 +196,8 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     
     //CVPixelBufferRelease(imageBuffer);
-     
-    VTCompressionSessionEncodeFrame(_compression_session, frameData.videoFrame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
     
+    VTCompressionSessionEncodeFrame(_compression_session, frameData.videoFrame, frameData.videoPTS, frameData.videoDuration, frameProperties, (__bridge_retained void *)(frameData), NULL);
     if (frameProperties)
     {
         CFRelease(frameProperties);
@@ -206,6 +208,11 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
 }
 
 
+
+-(bool)needsSetup
+{
+    return !_compression_session;
+}
 
 
 - (bool)setupCompressor:(CapturedFrameData *)videoFrame
@@ -284,7 +291,6 @@ void VideoCompressorReceiveFrame(void *VTref, void *VTFrameRef, OSStatus status,
     
     
     //@autoreleasepool {
-    
     
     
     if(!sampleBuffer)

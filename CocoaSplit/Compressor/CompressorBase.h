@@ -16,6 +16,10 @@
 @interface CompressorBase : NSObject <VideoCompressor, NSCoding>
 {
     NSMutableArray *_audioBuffer;
+    bool _reset_flag;
+    dispatch_queue_t _consumerThread;
+    NSMutableArray *_compressQueue;
+    dispatch_semaphore_t _queueSemaphore;
 }
 
 
@@ -45,6 +49,8 @@
 
 -(int) drainOutputBufferFrame;
 -(void) reset;
+-(void)reconfigureCompressor;
+-(bool)needsSetup;
 -(BOOL) setupResolution:(CVImageBufferRef)withFrame;
 -(id <CSCompressorViewControllerProtocol>)getConfigurationView;
 

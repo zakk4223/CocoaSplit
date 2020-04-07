@@ -12,6 +12,7 @@
 #import "NDIAudioOutputDelegateProtocol.h"
 
 
+
 @interface CSNDICapture : CSCaptureBase <CSCaptureSourceProtocol, NDIVideoOutputDelegateProtocol, NDIAudioOutputDelegateProtocol>
 {
     NDIlib_v3 *_ndi_dispatch;

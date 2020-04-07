@@ -159,13 +159,12 @@
 
 
 
--(void) reset
+-(bool)needsSetup
 {
-    @synchronized (self) {
-        _reset_flag = YES;
-        dispatch_semaphore_signal(_queueSemaphore);
-    }
+    return !_av_codec;
 }
+
+
 
 
 -(void) internal_reset
@@ -176,7 +175,6 @@
     _last_pts = 0;
     
 
-    [self clearFrameQueue];
     
     if (_av_codec_ctx)
     {
@@ -208,113 +206,12 @@
 }
 
 
--(bool)queueFramedata:(CapturedFrameData *)frameData
-{
-    if (!_consumerThread)
-    {
-        [self startConsumerThread];
-    }
-    
-    @synchronized (self) {
-        [_compressQueue addObject:frameData];
-        dispatch_semaphore_signal(_queueSemaphore);
-    }
-    
-    return YES;
-}
-
-
--(void)clearFrameQueue
-{
-    @synchronized (self) {
-        [_compressQueue removeAllObjects];
-    }
-}
-
-
--(CapturedFrameData *)consumeframeData
-{
-    CapturedFrameData *retData = nil;
-    @synchronized (self) {
-        
-        
-        if (_compressQueue.count > 0)
-        {
-            retData = [_compressQueue objectAtIndex:0];
-            [_compressQueue removeObjectAtIndex:0];
-        }
-    }
-    return retData;
-}
-
-
--(void)startConsumerThread
-{
-    if (!_consumerThread)
-    {
-        _consumerThread = dispatch_queue_create("x264 consumer", DISPATCH_QUEUE_SERIAL);
-        dispatch_async(_consumerThread, ^{
-            
-            while (1)
-            {
-                @autoreleasepool {
-                    @synchronized (self) {
-                        
-                        if (self->_reset_flag)
-                        {
-                            [self internal_reset];
-                        }
-                    }
-                    CapturedFrameData *useData = [self consumeframeData];
-                    if (!useData)
-                    {
-                        dispatch_semaphore_wait(self->_queueSemaphore, DISPATCH_TIME_FOREVER);
-                    } else {
-                        [self real_compressFrame:useData];
-                    }
-                }
-            }
-        });
-    }
-}
 
 
 
--(bool)compressFrame:(CapturedFrameData *)frameData
-{
-    if (![self hasOutputs])
-    {
-        return NO;
-    }
-    
-    
-    if (!_av_codec && !self.errored)
-    {
-        BOOL setupOK;
-        
-        setupOK = [self setupCompressor:frameData];
-        
-        if (!setupOK)
-        {
-            self.errored = YES;
-            return NO;
-        }
-    } else if (!_av_codec) {
-        return NO;
-    }
-    
-    
-    
-    [self reconfigureCompressor];
-    
-    if (frameData.videoFrame)
-    {
-        CVPixelBufferRetain(frameData.videoFrame);
-    }
 
-    [self queueFramedata:frameData];
-    return YES;
-}
+
+
 
 
 - (bool)real_compressFrame:(CapturedFrameData *)frameData
@@ -394,7 +291,7 @@
         VTPixelTransferSessionTransferImage(self->_vtpt_ref, imageBuffer, converted_frame);
         
         
-        CVPixelBufferRelease(imageBuffer);
+        //CVPixelBufferRelease(imageBuffer);
         imageBuffer = nil;
         
         //poke the frameData so it releases the video buffer

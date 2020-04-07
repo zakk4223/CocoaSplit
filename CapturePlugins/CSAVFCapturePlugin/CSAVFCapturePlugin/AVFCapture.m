@@ -125,7 +125,6 @@
 
 -(void)dealloc
 {
-    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     if (_capture_session)
     {
@@ -352,21 +351,6 @@
     return [CALayer layer];
  }
 
-
--(void)frameTick
-{
-    
-    if (self.renderType == kCSRenderOnFrameTick)
-    {
-        
-        [self updateLayersWithBlock:^(CALayer *layer) {
-            [layer setNeedsDisplay];
-        }];
-    }
-    
-    
-
-}
 
 
 -(NSSize)captureSize

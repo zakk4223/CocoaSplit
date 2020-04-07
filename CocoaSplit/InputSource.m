@@ -1566,7 +1566,6 @@ static NSArray *_sourceTypes = nil;
         [self deregisterVideoInput:vInput];
     }
     
-
     self.layer = nil;
     
 }

@@ -34,10 +34,6 @@
     VTPixelTransferSessionRef _vtpt_ref;
     double _next_keyframe_time;
     int64_t _last_pts;
-    bool _reset_flag;
-    dispatch_queue_t _consumerThread;
-    NSMutableArray *_compressQueue;
-    dispatch_semaphore_t _queueSemaphore;
     CFMutableDictionaryRef _formatExtensions;
     
     

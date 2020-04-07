@@ -91,21 +91,6 @@
 }
 
 
--(void)frameTick
-{
-    
-    if (self.renderType == kCSRenderOnFrameTick)
-    {
-        
-        /*
-        [self updateLayersWithBlock:^(CALayer *layer) {
-            [((CSIOSurfaceLayer *)layer) setNeedsDisplay];
-        }];*/
-    }
-    
-}
-
-
 -(CALayer *)createNewLayer
 {
     

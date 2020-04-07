@@ -125,7 +125,7 @@ OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessio
 {
 
     VTSessionSetProperty(session, kVTCompressionPropertyKey_AllowFrameReordering, kCFBooleanFalse);
-    VTSessionSetProperty(session, (__bridge CFStringRef)@"RealTime", kCFBooleanTrue);
+    VTSessionSetProperty(session, kVTCompressionPropertyKey_RealTime, kCFBooleanTrue);
 
     int real_keyframe_interval = 2;
     if (self.keyframe_interval && self.keyframe_interval > 0)

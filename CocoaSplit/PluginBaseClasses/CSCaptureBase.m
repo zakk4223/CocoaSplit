@@ -116,6 +116,7 @@
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:self.activeVideoDevice.uniqueID forKey:@"active_uniqueID"];
+    
     [aCoder encodeBool:self.allowDedup forKey:@"allowDedup"];
     [aCoder encodeBool:self.cachePersistent forKey:@"cachePersistent"];
     
@@ -244,10 +245,7 @@
         self.activeVideoDevice = nil;
     } else {
         self.activeVideoDevice = [currentAvailableDevices objectAtIndex:sidx];
-        if (self.allowDedup)
-        {
-            [[SourceCache sharedCache] cacheSourcePersistent:self];
-        }
+
     }
 }
 
