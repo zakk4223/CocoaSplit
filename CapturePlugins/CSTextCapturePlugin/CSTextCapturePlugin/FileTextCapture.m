@@ -138,13 +138,13 @@
         return;
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0
-                                             ), ^{
+    dispatch_async(_fileChangeQueue, ^{
         [self cancelWatch];
         NSData *fileData = [NSData dataWithContentsOfFile:filename];
         [self watchPath:filename];
         [self processFileData:fileData];
     });
+
 }
 
 
@@ -229,10 +229,9 @@
     
     
     int fd = open([filePath UTF8String], O_EVTONLY);
-    NSLog(@"FD IS %d", fd);
     __block typeof(self) blockSelf = self;
     
-    _fileSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, fd, DISPATCH_VNODE_DELETE | DISPATCH_VNODE_WRITE | DISPATCH_VNODE_EXTEND | DISPATCH_VNODE_ATTRIB | DISPATCH_VNODE_LINK | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_REVOKE, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0));
+    _fileSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, fd, DISPATCH_VNODE_DELETE | DISPATCH_VNODE_WRITE | DISPATCH_VNODE_EXTEND | DISPATCH_VNODE_ATTRIB | DISPATCH_VNODE_LINK | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_REVOKE, _fileChangeQueue);
     
     dispatch_source_set_event_handler(_fileSource, ^{
         unsigned long flags = dispatch_source_get_data(blockSelf->_fileSource);
@@ -243,9 +242,7 @@
             blockSelf->_fileSource = NULL;
             [blockSelf watchPath:filePath];
         } else {
-            dispatch_async(self->_fileChangeQueue, ^{
                 [self openFile:filePath];
-            });
         }
         
     });
