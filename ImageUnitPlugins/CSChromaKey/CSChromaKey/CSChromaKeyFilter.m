@@ -28,6 +28,7 @@ static CIKernel *_CSChromaKeyFilterKernel = nil;
     return [super init];
 }
 
+
 - (NSDictionary *)customAttributes
 {
     return @{

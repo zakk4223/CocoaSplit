@@ -97,8 +97,5 @@
 
 }
 
--(void)dealloc
-{
-    NSLog(@"DEALLOC AVCAPTURE PLAYER");
-}
+
 @end

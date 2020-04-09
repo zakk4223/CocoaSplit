@@ -133,7 +133,7 @@
             CVPixelBufferPoolCreatePixelBuffer(kCFAllocatorDefault, _cvpool, &dummyFrame);
             CVMetalTextureRef dummyTexture = NULL;
             
-            CVMetalTextureCacheCreateTextureFromImage(NULL, _cvmetalcache, dummyFrame, NULL, MTLPixelFormatBGRA8Unorm, CVPixelBufferGetWidth(dummyFrame), CVPixelBufferGetHeight(dummyFrame), 0, &dummyTexture);
+            CVMetalTextureCacheCreateTextureFromImage(NULL, _cvmetalcache, dummyFrame, NULL, MTLPixelFormatBGRA8Unorm_sRGB, CVPixelBufferGetWidth(dummyFrame), CVPixelBufferGetHeight(dummyFrame), 0, &dummyTexture);
             if (@available(macOS 10.13, *)) {
                 self.renderer = [CARenderer rendererWithMTLTexture:CVMetalTextureGetTexture(dummyTexture) options:nil];
             } else {
@@ -199,7 +199,7 @@
     if (_useMetalRenderer)
     {
         CVMetalTextureRef mtlTexture = NULL;
-        CVMetalTextureCacheCreateTextureFromImage(NULL, _cvmetalcache, pixelBuffer, NULL, MTLPixelFormatBGRA8Unorm, CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer), 0, &mtlTexture);
+        CVMetalTextureCacheCreateTextureFromImage(NULL, _cvmetalcache, pixelBuffer, NULL, MTLPixelFormatBGRA8Unorm_sRGB, CVPixelBufferGetWidth(pixelBuffer), CVPixelBufferGetHeight(pixelBuffer), 0, &mtlTexture);
         if (!mtlTexture)
         {
             return;
@@ -424,7 +424,6 @@
 -(void)dealloc
 {
     
-    NSLog(@"DEALLOC RENDER %@", self);
     if (_cvpool)
     {
         CVPixelBufferPoolRelease(_cvpool);

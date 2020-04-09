@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CIPlugInVersion</key>
+	<integer>1</integer>
+	<key>CIPlugInFilterList</key>
+	<dict>
+		<key>CSLUTFilter</key>
+		<dict>
+			<key>CIFilterAttributes</key>
+			<dict>
+				<key>CIAttributeDescription</key>
+				<string>filterDescription</string>
+				<key>CIAttributeFilterCategories</key>
+				<array>
+					<string>CICategoryColorEffect</string>
+				</array>
+				<key>CIAttributeFilterDisplayName</key>
+				<string>CSLUTFilter</string>
+			</dict>
+			<key>CIFilterClass</key>
+			<string>CSLUTFilter</string>
+			<key>CIHasCustomInterface</key>
+			<false/>
+		</dict>
+	</dict>
+</dict>
+</plist>

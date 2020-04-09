@@ -174,6 +174,7 @@
 		34788E441F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34788E421F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib */; };
 		34792AF616104AA70065A859 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AF516104AA70065A859 /* IOKit.framework */; };
 		34792AFB1611A6B90065A859 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 34792AFA1611A6B90065A859 /* IOSurface.framework */; };
+		34799D14243F165100B432BB /* CSLUTFilter.plugin in Copy Files */ = {isa = PBXBuildFile; fileRef = 34799CFB243F0F1400B432BB /* CSLUTFilter.plugin */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3479A9971A9007DD00A524F0 /* CocoaSplit.sdef in Resources */ = {isa = PBXBuildFile; fileRef = 3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */; };
 		347B14DC198492D900DC7DF0 /* InputPopupControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */; };
 		347B14DD198492D900DC7DF0 /* InputPopupControllerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 347B14DB198492D900DC7DF0 /* InputPopupControllerViewController.xib */; };
@@ -400,6 +401,13 @@
 			remoteGlobalIDString = 34BD1E121B1B970C0015CBEC;
 			remoteInfo = CSVaughnliveStreamServicePlugin;
 		};
+		34799CFA243F0F1400B432BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34799CEB243F0F1300B432BB /* CSLUTFilter.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34799CE2243F0F1300B432BB;
+			remoteInfo = CSLUTFilter;
+		};
 		34A7C1A019B9A41A00BC6882 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */;
@@ -608,6 +616,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				34799D14243F165100B432BB /* CSLUTFilter.plugin in Copy Files */,
 				34A8883622A5CB5F0023D8B9 /* CSSyphonCapturePlugin.bundle in Copy Files */,
 				34E88C9E218DB0A90053913B /* CSAppleWebViewCapturePlugin.bundle in Copy Files */,
 				344036862080B817004BC514 /* CSMixerStreamServicePlugin.bundle in Copy Files */,
@@ -926,6 +935,7 @@
 		34788E421F0DD56B00C3C9C5 /* CSAudioInputSourceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CSAudioInputSourceViewController.xib; sourceTree = "<group>"; };
 		34792AF516104AA70065A859 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		34792AFA1611A6B90065A859 /* IOSurface.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOSurface.framework; path = System/Library/Frameworks/IOSurface.framework; sourceTree = SDKROOT; };
+		34799CEB243F0F1300B432BB /* CSLUTFilter.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSLUTFilter.xcodeproj; path = ImageUnitPlugins/CSLUTFilter/CSLUTFilter.xcodeproj; sourceTree = "<group>"; };
 		3479A9961A9007DD00A524F0 /* CocoaSplit.sdef */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CocoaSplit.sdef; sourceTree = "<group>"; };
 		347B14D9198492D900DC7DF0 /* InputPopupControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InputPopupControllerViewController.h; path = ../InputPopupControllerViewController.h; sourceTree = "<group>"; };
 		347B14DA198492D900DC7DF0 /* InputPopupControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InputPopupControllerViewController.m; path = ../InputPopupControllerViewController.m; sourceTree = "<group>"; };
@@ -2016,6 +2026,14 @@
 			path = JSExports;
 			sourceTree = "<group>";
 		};
+		34799CEC243F0F1300B432BB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34799CFB243F0F1400B432BB /* CSLUTFilter.plugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		349461581AB420E600F28883 /* CSAnimationRunner */ = {
 			isa = PBXGroup;
 			children = (
@@ -2140,6 +2158,7 @@
 		34AFC24419B058D80007C07B /* ImageUnitPlugins */ = {
 			isa = PBXGroup;
 			children = (
+				34799CEB243F0F1300B432BB /* CSLUTFilter.xcodeproj */,
 				343DD6AB19AAD3660017232A /* CSChromaKey.xcodeproj */,
 				34D43550198DCE3800266169 /* TextureWrapPlugin.xcodeproj */,
 			);
@@ -2578,6 +2597,10 @@
 					ProjectRef = 34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 34799CEC243F0F1300B432BB /* Products */;
+					ProjectRef = 34799CEB243F0F1300B432BB /* CSLUTFilter.xcodeproj */;
+				},
+				{
 					ProductGroup = 344036792080AF71004BC514 /* Products */;
 					ProjectRef = 344036782080AF71004BC514 /* CSMixerStreamServicePlugin.xcodeproj */;
 				},
@@ -2697,6 +2720,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSVaughnliveStreamServicePlugin.bundle;
 			remoteRef = 3473D27D1D4C349700842EEE /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		34799CFB243F0F1400B432BB /* CSLUTFilter.plugin */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSLUTFilter.plugin;
+			remoteRef = 34799CFA243F0F1400B432BB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */ = {
