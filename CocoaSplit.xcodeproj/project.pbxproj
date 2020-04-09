@@ -3341,7 +3341,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.1.12;
+				CURRENT_PROJECT_VERSION = 2.1.13;
 				DEVELOPMENT_TEAM = L3JLUY4S5E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3358,7 +3358,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
 				"LIBRARY_SEARCH_PATHS[arch=*]" = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 2.1.12;
+				MARKETING_VERSION = 2.1.13;
 				OTHER_LDFLAGS = (
 					"$TEMP_FILES_DIR/ffmpeg-fix/libswresample.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libavutil.a",
@@ -3394,7 +3394,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 2.1.12;
+				CURRENT_PROJECT_VERSION = 2.1.13;
 				DEVELOPMENT_TEAM = L3JLUY4S5E;
 				ENABLE_HARDENED_RUNTIME = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -3411,7 +3411,7 @@
 				INFOPLIST_FILE = "CocoaSplit/CocoaSplit-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
-				MARKETING_VERSION = 2.1.12;
+				MARKETING_VERSION = 2.1.13;
 				OTHER_LDFLAGS = (
 					"$TEMP_FILES_DIR/ffmpeg-fix/libswresample.a",
 					"$TEMP_FILES_DIR/ffmpeg-fix/libavutil.a",
