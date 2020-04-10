@@ -26,7 +26,7 @@
 -(void)setValue:(id)value forKey:(NSString *)key
 {
     [super setValue:value forKey:key];
-    if ([key isEqualToString:@"inputLUTImage"])
+    if ([key isEqualToString:@"inputLUTImage"] && value)
     {
         [self processLUTImage:value];
     }
@@ -36,25 +36,33 @@
 
 -(void)processLUTImage:(CIImage *)lutImage
 {
-    //We have to render to something we can extract data out of :(
+    CGImageRef baseImage = lutImage.CGImage;
+    if (!baseImage)
+    {
+        return;
+    }
+
     int useSize = 64;
-    CGFloat width = lutImage.extent.size.width;
-    CGFloat height = lutImage.extent.size.height;
+    CGFloat width = CGImageGetWidth(baseImage);
+    CGFloat height = CGImageGetHeight(baseImage);
     int rowCnt = height/useSize;
     int colCnt = width/useSize;
     
     CGColorSpaceRef colorSpace = NULL;
-    colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+
+    colorSpace = CGImageGetColorSpace(baseImage);
+    
     uint8_t *bitmapPtr = malloc(width*height*4);
-    //CGContextRef cgContext = CGBitmapContextCreate(bitmapPtr, width, height, 8, width*4, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrderDefault);
+    CGContextRef cgContext = CGBitmapContextCreate(bitmapPtr, width, height, 8, width*4, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrderDefault);
+    
+    CGColorSpaceRelease(colorSpace);
+    
+    CGContextDrawImage(cgContext, CGRectMake(0, 0, width, height), baseImage);
     
     //CIContext *ctx = [CIContext contextWithCGContext:cgContext options:@{kCIContextOutputColorSpace: (__bridge id)colorSpace, kCIContextWorkingColorSpace: (__bridge id)colorSpace}];
     
 
     //[ctx drawImage:lutImage inRect:lutImage.extent fromRect:lutImage.extent];
-    CIContext *ctx = [CIContext context];
-    
-    [ctx render:lutImage toBitmap:bitmapPtr rowBytes:width*4 bounds:CGRectMake(0, 0, width, height) format:kCIFormatRGBA8 colorSpace:CGColorSpaceCreateWithName(kCGColorSpaceSRGB)];
     float *cubePtr = malloc(useSize*useSize*useSize*4*sizeof(float));
     NSData *tmpCubeData = [[NSData alloc] initWithBytesNoCopy:cubePtr length:useSize*useSize*useSize*4*sizeof(float) ];
     
@@ -91,8 +99,7 @@
         }
         z += colCnt;
     }
-    
-    //CGContextRelease(cgContext);
+    CGContextRelease(cgContext);
     free(bitmapPtr);
     _cubeData = tmpCubeData;
 }
@@ -100,18 +107,35 @@
 
 - (CIImage *)outputImage
 {
+    CIFilter *cubeFilter = nil;
+    
     if (_cubeData)
     {
-        CIFilter *cubeFilter = [CIFilter filterWithName:@"CIColorCube" withInputParameters:@{
-            kCIInputImageKey: inputImage,
-            @"inputCubeData": _cubeData,
-            @"inputCubeDimension": @(64),
+        
+        if (@available(macOS 10.15, *))
+        {
+            cubeFilter = [CIFilter filterWithName:@"CIColorCubeWithColorSpace" withInputParameters:@{
+                kCIInputImageKey: inputImage,
+                @"inputCubeData": _cubeData,
+                @"inputCubeDimension": @(64),
+                @"inputColorSpace": (__bridge id)CGColorSpaceCreateDeviceRGB(),
+            }
+                          ];
+        } else {
+            cubeFilter = [CIFilter filterWithName:@"CIColorCube" withInputParameters:@{
+                kCIInputImageKey: inputImage,
+                @"inputCubeData": _cubeData,
+                @"inputCubeDimension": @(64),
+            }
+                          ];
         }
-        ];
-        return [cubeFilter outputImage];
-    } else {
-        return inputImage;
     }
+    if (cubeFilter)
+    {
+        return [cubeFilter outputImage];
+    }
+    return inputImage;
+    
 }
 
 
