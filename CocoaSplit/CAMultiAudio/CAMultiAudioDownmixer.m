@@ -364,7 +364,7 @@
             NSLog(@"Failed to set output volume for channel %d on %@ with status %d", chan, self, err);
         }
         
-        if (_inputChannels < self.graph.audioFormat.channelCount)
+        if ((_inputChannels > 0) && _inputChannels < self.graph.audioFormat.channelCount)
         {
             UInt32 inChan = chan % _inputChannels;
             [self setVolume:1.0f forChannel:inChan outChannel:chan];

@@ -172,6 +172,8 @@
         if (self.repeat == kCSFFMovieRepeatNone || self.repeat == kCSFFMovieRepeatAll)
         {
             currentIdx++;
+        } else if (self.repeat == kCSFFMovieRepeatRandom) {
+            currentIdx = arc4random_uniform(_inputQueue.count);
         }
 
     }
@@ -638,8 +640,17 @@
     CSFFMpegInput *willPlay = nil;
     CSFFMpegInput *wasPlaying = self.currentlyPlaying;
     
+
+    
+    
     if (_audio_done && _video_done)
     {
+        
+        
+        if (wasPlaying)
+        {
+            [wasPlaying seek:0.0f];
+        }
 
         //[self.currentlyPlaying stop];
         
@@ -657,8 +668,17 @@
         
         if (!willPlay && (willPlay != wasPlaying))
         {
+            self.playing = NO;
+            if (self.pauseStateChanged)
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.pauseStateChanged();
+                });
+            }
+            
             if (self.itemStarted)
             {
+
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{ self.itemStarted(nil);});
             }
 

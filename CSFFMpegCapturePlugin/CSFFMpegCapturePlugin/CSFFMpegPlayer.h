@@ -16,7 +16,8 @@
 typedef enum ff_movie_repeat_t {
     kCSFFMovieRepeatNone = 0,
     kCSFFMovieRepeatOne = 1,
-    kCSFFMovieRepeatAll = 2
+    kCSFFMovieRepeatAll = 2,
+    kCSFFMovieRepeatRandom = 3
 } ff_movie_repeat;
 
 

@@ -20,6 +20,7 @@
     // Do view setup here.
     if (self.captureObj && self.captureObj.player)
     {
+        [self pauseStateChanged];
         self.captureObj.player.pauseStateChanged = ^{
             [self pauseStateChanged];
         };
@@ -220,7 +221,7 @@
 -(void)pauseStateChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.captureObj.player.paused)
+        if (self.captureObj.player.paused || !self.captureObj.player.playing)
         {
             NSImage *playImage = [[NSBundle bundleForClass:[self class]] imageForResource:@"play"];
             

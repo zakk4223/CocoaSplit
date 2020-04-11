@@ -705,7 +705,7 @@
 {
     @synchronized (self) {
         _stop_request = YES;
-        
+        _is_ready = NO;
         dispatch_semaphore_signal(_read_loop_semaphore);
         
         av_thread_message_queue_set_err_send(_video_message_queue, AVERROR_EOF);

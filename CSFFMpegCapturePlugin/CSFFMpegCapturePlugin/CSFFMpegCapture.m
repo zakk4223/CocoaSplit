@@ -271,15 +271,20 @@
                 [CATransaction commit];
             }];
         }
-        self.durationString = [self timeToString:item.duration];
-        self.currentMovieDuration = item.duration;
-        [self generateUniqueID];
-        self.captureName = item.shortName;
-        if (self.pcmPlayer)
+        if (item)
         {
-            self.pcmPlayer.name = item.shortName;
+            self.durationString = [self timeToString:item.duration];
+            self.currentMovieDuration = item.duration;
+            [self generateUniqueID];
+            self.captureName = item.shortName;
+            if (self.pcmPlayer)
+            {
+                self.pcmPlayer.name = item.shortName;
+            }
+            [self changeAttachedAudioInputName:self.uuid withName:item.shortName];
+        } else {
+            self.currentTimeString = [self timeToString:0.0f];
         }
-        [self changeAttachedAudioInputName:self.uuid withName:item.shortName];
     });
     
 }

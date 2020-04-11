@@ -227,6 +227,11 @@
 }
 
 
+-(bool)needsSetup
+{
+    return NO;
+}
+
 
 -(void)reconfigureCompressor
 {
