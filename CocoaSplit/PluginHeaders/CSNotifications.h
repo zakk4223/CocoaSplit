@@ -21,6 +21,8 @@ extern NSString *const CSNotificationLayoutInStagingChanged;
 extern NSString *const CSNotificationStreamStarted;
 extern NSString *const CSNotificationStreamStopped;
 
+extern NSString *const CSNotificationMainRecordingStarted;
+extern NSString *const CSNotificationMainRecordingStopped;
 
 extern NSString *const CSNotificationOutputAdded;
 extern NSString *const CSNotificationOutputDeleted;

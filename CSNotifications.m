@@ -21,7 +21,8 @@ NSString *const CSNotificationLayoutInStagingChanged = @"CSNotificationLayoutInS
 
 NSString *const CSNotificationStreamStarted = @"CSNotificationStreamStarted";
 NSString *const CSNotificationStreamStopped = @"CSNotificationStreamStopped";
-
+NSString *const CSNotificationMainRecordingStarted = @"CSNotificationMainRecordingStarted";
+NSString *const CSNotificationMainRecordingStopped = @"CSNotificationMainRecordingStopped";
 
 NSString *const CSNotificationOutputAdded = @"CSNotificationOutputAdded";
 NSString *const CSNotificationOutputDeleted = @"CSNotificationOutputDeleted";

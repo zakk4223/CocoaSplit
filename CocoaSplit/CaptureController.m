@@ -3497,8 +3497,12 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     if (mainRecordingActive)
     {
         tmpColor = CGColorCreateGenericRGB(1, 0, 0, 1);
+        [self postNotification:CSNotificationMainRecordingStarted forObject:self];
+
     } else {
         tmpColor = CGColorCreateGenericRGB(1, 0, 0, 0.5);
+        [self postNotification:CSNotificationMainRecordingStopped forObject:self];
+
     }
     
     self.recordButton.layer.backgroundColor = tmpColor;

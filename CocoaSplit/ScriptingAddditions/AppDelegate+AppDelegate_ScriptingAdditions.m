@@ -200,7 +200,7 @@
 {
     
     
-    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio", @"transitions", @"streamRunning", @"stagingEnabled", @"audioTracks"];
+    NSArray *keys = @[@"layouts", @"width", @"height", @"fps", @"activelayout", @"layoutscripts", @"audioInputs", @"captureDestinations", @"staginglayout", @"livelayout", @"useTransitions", @"previewAudio", @"streamAudio", @"transitions", @"streamRunning", @"stagingEnabled", @"audioTracks", @"recordingActive"];
     
     return [keys containsObject:key];
 }
