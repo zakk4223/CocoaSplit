@@ -72,11 +72,10 @@
         
         
 
-        CGColorSpaceRef cSpace = CGColorSpaceCreateWithName(kCGColorSpaceITUR_709);
-        NSData *cData = CFBridgingRelease(CGColorSpaceCopyICCData(cSpace));
-        NSLog(@"NADATA %@", cData);
+        //CGColorSpaceRef cSpace = CGColorSpaceCreateWithName(kCGColorSpaceITUR_709);
+        //NSData *cData = CFBridgingRelease(CGColorSpaceCopyICCData(cSpace));
        // [videoSettings setValue:@{AVVideoColorPrimariesKey: AVVideoColorPrimaries_ITU_R_709_2, AVVideoTransferFunctionKey: AVVideoTransferFunction_ITU_R_709_2, AVVideoYCbCrMatrixKey: AVVideoYCbCrMatrix_ITU_R_601_4} forKey:AVVideoColorPropertiesKey];
-        [videoSettings setValue:@{@"IOSurfaceColorSpace": cData} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+        [videoSettings setValue:@{} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
         
         _video_capture_output = [[AVCaptureVideoDataOutput alloc] init];
         

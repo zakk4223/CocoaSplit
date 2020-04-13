@@ -24,6 +24,7 @@
 
 -(NSArray *)layouts
 {
+    NSLog(@"CALLED LAYOUTS!");
     NSMutableArray *layouts = self.captureController.sourceLayouts.mutableCopy;
     
     if (self.captureController.liveLayout)

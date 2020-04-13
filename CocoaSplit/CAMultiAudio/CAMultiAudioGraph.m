@@ -182,9 +182,7 @@
             return NO;
         }
         
-        
-        NSLog(@"CONNECT %@:%d TO %@:%d FORMAT %@", node, outBus, toNode, inBus, format);
-        
+                
         OSStatus err;
         
         UInt32 bus = inBus;
