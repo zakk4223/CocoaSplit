@@ -139,6 +139,7 @@
 
 -(void)displayLayer:(ImageCaptureLayer *)layer
 {
+    
     int gifIndex = layer.presentationLayer.gifIndex;
     if (_imageSource)
     {
@@ -341,6 +342,7 @@
         
         [self updateLayersWithFramedataBlock:^(CALayer *layer) {
             [layer addAnimation:self->_animation forKey:@"gifIndex"];
+            layer.delegate = self;
         }];
         
         
