@@ -18,10 +18,10 @@
 {
     if (self = [super init])
     {
-        self.lineLimit = 0;
-        self.startLine = 0;
-        self.collapseLines = NO;
-        self.fontSizeAdjust = 0;
+        _lineLimit = 0;
+        _startLine = 0;
+        _collapseLines = NO;
+        _fontSizeAdjust = 0;
         _fileChangeQueue = dispatch_queue_create("File Watch Queue", DISPATCH_QUEUE_SERIAL);
     }
     
@@ -114,8 +114,9 @@
 
 -(void)setCurrentFile:(NSString *)currentFile
 {
+    [self openFile:currentFile];
     _currentFile = currentFile;
-    [self openFile:self.currentFile];
+
 }
 
 -(NSString *)currentFile
@@ -133,13 +134,19 @@
 {
     
     
-    if (!self.currentFile)
+
+    if (!filename)
     {
+        [self cancelWatch];
         return;
     }
     
-    dispatch_async(_fileChangeQueue, ^{
+    if (self.currentFile && ![self.currentFile isEqualToString:filename])
+    {
         [self cancelWatch];
+    }
+
+    dispatch_async(_fileChangeQueue, ^{
         NSData *fileData = [NSData dataWithContentsOfFile:filename];
         [self watchPath:filename];
         [self processFileData:fileData];
@@ -160,7 +167,6 @@
 
    if (fileAttributedString && [documentAttributes[NSDocumentTypeDocumentAttribute] isEqualToString:NSPlainTextDocumentType])
    {
-        self.attributedText = nil;
         //self.currentFile = filename;
         NSString *fileText = fileAttributedString.string;
         
@@ -192,7 +198,8 @@
             fileText = [fileText stringByReplacingOccurrencesOfString:@"\n" withString:@" "];
         }
         
-        self.text = fileText;
+
+       self.attributedText = [[NSAttributedString alloc] initWithString:fileText attributes:self.defaultAttributes];
    } else if (fileAttributedString) {
        [fileAttributedString beginEditing];
        [fileAttributedString enumerateAttribute:NSFontAttributeName inRange:NSMakeRange(0, fileAttributedString.length) options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
@@ -202,7 +209,7 @@
            [fileAttributedString addAttribute:NSFontAttributeName value:newFont range:range];
        }];
        [fileAttributedString endEditing];
-       self.text = nil;
+       //self.text = nil;
        self.attributedText = fileAttributedString;
    }
 }
@@ -231,18 +238,18 @@
     int fd = open([filePath UTF8String], O_EVTONLY);
     __block typeof(self) blockSelf = self;
     
-    _fileSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, fd, DISPATCH_VNODE_DELETE | DISPATCH_VNODE_WRITE | DISPATCH_VNODE_EXTEND | DISPATCH_VNODE_ATTRIB | DISPATCH_VNODE_LINK | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_REVOKE, _fileChangeQueue);
+    _fileSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_VNODE, fd, DISPATCH_VNODE_DELETE | DISPATCH_VNODE_WRITE | DISPATCH_VNODE_RENAME | DISPATCH_VNODE_REVOKE, _fileChangeQueue);
     
     dispatch_source_set_event_handler(_fileSource, ^{
         unsigned long flags = dispatch_source_get_data(blockSelf->_fileSource);
-        
+        //NSLog(@"FLAGS %lu", flags);
         if (flags & DISPATCH_VNODE_DELETE)
         {
             dispatch_source_cancel(blockSelf->_fileSource);
             blockSelf->_fileSource = NULL;
             [blockSelf watchPath:filePath];
         } else {
-                [self openFile:filePath];
+            [self openFile:filePath];
         }
         
     });

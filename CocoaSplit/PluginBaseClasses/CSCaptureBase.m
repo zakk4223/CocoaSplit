@@ -354,9 +354,11 @@
 {
     
 
-    CALayer *newLayer = [self createNewLayer];
+    CALayer *newLayer = nil;
     @synchronized(self)
     {
+        newLayer = [self createNewLayer];
+
         if (!self.tickInput)
         {
             self.tickInput = inputsrc;

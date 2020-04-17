@@ -512,7 +512,7 @@
     elapsed_t = end_t - start_t;
     if (elapsed_t > 1.0f/60.0f)
     {
-        NSLog(@"RENDER TOOK %f", elapsed_t);
+        NSLog(@"RENDER TOOK %f %@", elapsed_t, NSThread.currentThread);
     }
     if (self.frameReadyBlock)
     {

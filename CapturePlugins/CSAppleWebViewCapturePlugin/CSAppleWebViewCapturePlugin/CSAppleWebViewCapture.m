@@ -116,6 +116,7 @@
 
 -(void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
+    
     [self.webView setValue:@NO forKey:@"drawsBackground"];
     NSString *captureName = self.webView.title;
     if (!captureName || captureName.length == 0)

@@ -227,8 +227,7 @@
         }
         [outputsForBus addObject:[[CAMultiAudioConnection alloc] initWithNode:toNode bus:inBus]];
         toNode.inputConnections[@(inBus)] = [[CAMultiAudioConnection alloc] initWithNode:node bus:outBus];
-        NSLog(@"%@ OUTPUT %@", node, [node outputFormatForBus:outBus]);
-        NSLog(@"%@ INPUT %@", toNode, [toNode inputFormatForBus:inBus]);
+
     }
     return YES;
 }

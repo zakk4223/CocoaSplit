@@ -51,9 +51,17 @@
 -(CALayer *)createNewLayer
 {
     CATextLayer *newLayer = [CATextLayer layer];
-    newLayer.string = _attribString;
     
-    newLayer.bounds = CGRectMake(0.0, 0.0, _attribString.size.width, _attribString.size.height);
+    NSMutableAttributedString *aStr = nil;
+    @synchronized (self) {
+        aStr = _attribString;
+    }
+    
+    if (aStr)
+    {
+        newLayer.string = _attribString;
+        newLayer.bounds = CGRectMake(0.0, 0.0, aStr.size.width, aStr.size.height);
+    }
     newLayer.alignmentMode = self.alignmentMode;
     newLayer.wrapped = self.wrapped;
     return newLayer;
@@ -150,14 +158,18 @@
     {
         
         NSDictionary *strAttrs = self.defaultAttributes;
+        NSMutableAttributedString *newAttribString = nil;
         if (self.attributedText)
         {
-            _attribString = self.attributedText.mutableCopy;
+            newAttribString = self.attributedText.mutableCopy;
         } else {
 
-            _attribString = [[NSMutableAttributedString alloc] initWithString:self.text attributes:strAttrs];
+            newAttribString = [[NSMutableAttributedString alloc] initWithString:self.text attributes:strAttrs];
         }
         
+        @synchronized (self) {
+            _attribString = newAttribString;
+        }
         if ([self.alignmentMode isEqualToString:kCAAlignmentCenter] || [self.alignmentMode isEqualToString:kCAAlignmentRight])
         {
             self.allowScaling = YES;
@@ -168,7 +180,8 @@
         
         [self updateLayersWithBlock:^(CALayer *layer) {
             //layer.bounds = CGRectMake(0.0, 0.0, self->_attribString.size.width, self->_attribString.size.height);
-            ((CATextLayer *)layer).string = self->_attribString;
+            
+            ((CATextLayer *)layer).string = newAttribString;
             ((CATextLayer *)layer).alignmentMode = self.alignmentMode;
             ((CATextLayer *)layer).wrapped = self.wrapped;
         }];
@@ -193,11 +206,9 @@
     _attributedText = attributedText;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        
         self.captureName = attributedText.string;
         
     });
-    
     
     
     

@@ -683,7 +683,7 @@ static NSArray *_sourceTypes = nil;
     {
         [CATransaction begin];
         updateBlock(_currentLayer);
-        [_currentLayer setNeedsDisplay];
+        [_currentLayer displayIfNeeded];
         [CATransaction commit];
     }
 }
