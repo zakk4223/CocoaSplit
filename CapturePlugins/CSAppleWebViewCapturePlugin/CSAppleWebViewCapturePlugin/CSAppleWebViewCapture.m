@@ -35,15 +35,8 @@
     return self;
 }
 
-
--(NSString *)webURL
+-(void)createWebView
 {
-    return _webURL;
-}
-
--(void)setWebURL:(NSString *)webURL
-{
-    _webURL = webURL;
     if (!self.webView)
     {
         WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
@@ -56,9 +49,11 @@
         }
         
         config.preferences = webPrefs;
-        self.webView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.browser_width, self.browser_height) configuration:config];
-        self.webView.navigationDelegate = self;
-        self.webView.layer.backgroundColor = [NSColor clearColor].CGColor;
+        WKWebView *newView = [[WKWebView alloc] initWithFrame:CGRectMake(0, 0, self.browser_width, self.browser_height) configuration:config];
+        newView.navigationDelegate = self;
+        newView.layer.backgroundColor = [NSColor clearColor].CGColor;
+        self.webView = newView;
+
     }
     
     if (!_frameSemaphore)
@@ -66,7 +61,27 @@
         _frameSemaphore = dispatch_semaphore_create(1);
     }
     
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:webURL]]];
+}
+
+-(NSString *)webURL
+{
+    return _webURL;
+}
+
+
+-(void)setWebURL:(NSString *)webURL
+{
+    _webURL = webURL;
+    if (self.webView)
+    {
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:webURL]]];
+        
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self createWebView];
+            [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:webURL]]];
+        });
+    }
 }
 
 -(NSSize) captureSize
@@ -146,15 +161,15 @@
 -(void)restoreWithCoder:(NSCoder *)aDecoder
 {
     [super restoreWithCoder:aDecoder];
-    self.browser_width = [aDecoder decodeIntForKey:@"browser_width"];
-    self.browser_height = [aDecoder decodeIntForKey:@"browser_height"];
+    _browser_width = [aDecoder decodeIntForKey:@"browser_width"];
+    _browser_height = [aDecoder decodeIntForKey:@"browser_height"];
     self.webURL = [aDecoder decodeObjectForKey:@"webURL"];
 }
 
 -(void)frameTick
 {
 
-
+    
     if (self.webView)
     {
         if (!dispatch_semaphore_wait(_frameSemaphore, DISPATCH_TIME_NOW))
