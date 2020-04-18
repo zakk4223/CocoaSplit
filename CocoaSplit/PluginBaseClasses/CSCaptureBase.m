@@ -575,8 +575,7 @@
             if (useEngine)
             {
                 
-                NSLog(@"ENGINE %@", useEngine);
-                player = [useEngine createPCMInput:forUID withFormat:withFormat];
+                player = [useEngine createPCMInput:forUID withFormat:useFormat];
             }
             
             if (player)
