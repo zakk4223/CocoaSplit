@@ -29,7 +29,7 @@
 @property (assign) float bufferDuration;
 @property (strong) NSString *name;
 @property (strong) CSIRCompressor *compressor;
-
+@property (assign) bool buffer_draining;
 -(void) writeCurrentBuffer:(NSString *)toFile;
 -(void) writeCurrentBuffer:(NSString *)toFile withCompletionBlock:(void (^)(void))completionBlock;
 -(void) writeCurrentBuffer:(NSString *)toFile usingDuration:(float)seconds_to_write withCompletionBlock:(void (^)(void))completionBlock;
