@@ -272,6 +272,7 @@
         [self.oauthObject jsonRequest:apiRequest completionHandler:^(id decodedData) {
             
             NSDictionary *user_response = (NSDictionary *)decodedData;
+            
             NSString *account_name = [user_response objectForKey:@"email"];
             [authenticator saveToKeychain:account_name];
             

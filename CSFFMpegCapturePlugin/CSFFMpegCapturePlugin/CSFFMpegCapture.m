@@ -425,8 +425,10 @@
     
     if (use_buf)
     {
-    
-        _lastSize = NSMakeSize(CVPixelBufferGetWidth(use_buf), CVPixelBufferGetHeight(use_buf));
+        if (NSEqualSizes(_lastSize, NSZeroSize))
+        {
+            _lastSize = NSMakeSize(CVPixelBufferGetWidth(use_buf), CVPixelBufferGetHeight(use_buf));
+        }
         
         if ((cTime - _lastTimeUpdate > 0.5) && self.updateMovieTime)
         {

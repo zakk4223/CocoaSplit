@@ -304,7 +304,7 @@ UInt32 inNumberFrames,
 -(bool)setInputStreamFormat:(AVAudioFormat *)format bus:(UInt32)bus
 {
 
-    //AudioUnitUninitialize(self.audioUnit);
+    AudioUnitUninitialize(self.audioUnit);
     
     OSStatus err = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, kAudioUnitScope_Input, bus, format.streamDescription, sizeof(AudioStreamBasicDescription));
 

@@ -1376,6 +1376,10 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
     if (useRecorder)
     {
         [useRecorder stopRecordingForOutput:output];
+        if (!layout.recorder)
+        {
+            [layout clearSourceList];
+        }
         //output.active = NO;
         if (self.mainLayoutRecorder)
         {

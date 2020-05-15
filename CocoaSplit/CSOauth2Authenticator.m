@@ -413,7 +413,7 @@ NSString *const kCSOauth2ClientSecret = @"CSOauth2ClientSecret";
     request.HTTPMethod = @"POST";
     
     NSDictionary *queryDict = @{@"grant_type": @"authorization_code",
-                                @"code": forCode,
+                                @"code": [forCode stringByRemovingPercentEncoding],
                                 @"redirect_uri": redirectURL,
                                 @"client_id": self.clientID,
                                 @"client_secret": clientSecret };

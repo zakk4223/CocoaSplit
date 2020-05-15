@@ -1,0 +1,318 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34A407382463263F00BD32BB /* CSVirtualCameraDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A407372463263F00BD32BB /* CSVirtualCameraDevice.m */; };
+		34A4073B2463274D00BD32BB /* CSVirtualCameraOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A4073A2463274D00BD32BB /* CSVirtualCameraOutput.m */; };
+		34A4073E246327DF00BD32BB /* CSVirtualCameraOutputService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A4073D246327DF00BD32BB /* CSVirtualCameraOutputService.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		34A4070B246320D100BD32BB /* CSVirtualCameraOutput.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSVirtualCameraOutput.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		34A4070E246320D100BD32BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		34A407362463263F00BD32BB /* CSVirtualCameraDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSVirtualCameraDevice.h; sourceTree = "<group>"; };
+		34A407372463263F00BD32BB /* CSVirtualCameraDevice.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSVirtualCameraDevice.m; sourceTree = "<group>"; };
+		34A407392463274D00BD32BB /* CSVirtualCameraOutput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSVirtualCameraOutput.h; sourceTree = "<group>"; };
+		34A4073A2463274D00BD32BB /* CSVirtualCameraOutput.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSVirtualCameraOutput.m; sourceTree = "<group>"; };
+		34A4073C246327DF00BD32BB /* CSVirtualCameraOutputService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSVirtualCameraOutputService.h; sourceTree = "<group>"; };
+		34A4073D246327DF00BD32BB /* CSVirtualCameraOutputService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSVirtualCameraOutputService.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		34A40708246320D100BD32BB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		34A40702246320D100BD32BB = {
+			isa = PBXGroup;
+			children = (
+				34A4070D246320D100BD32BB /* CSVirtualCameraOutput */,
+				34A4070C246320D100BD32BB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		34A4070C246320D100BD32BB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34A4070B246320D100BD32BB /* CSVirtualCameraOutput.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		34A4070D246320D100BD32BB /* CSVirtualCameraOutput */ = {
+			isa = PBXGroup;
+			children = (
+				34A4070E246320D100BD32BB /* Info.plist */,
+				34A407362463263F00BD32BB /* CSVirtualCameraDevice.h */,
+				34A407372463263F00BD32BB /* CSVirtualCameraDevice.m */,
+				34A407392463274D00BD32BB /* CSVirtualCameraOutput.h */,
+				34A4073A2463274D00BD32BB /* CSVirtualCameraOutput.m */,
+				34A4073C246327DF00BD32BB /* CSVirtualCameraOutputService.h */,
+				34A4073D246327DF00BD32BB /* CSVirtualCameraOutputService.m */,
+			);
+			path = CSVirtualCameraOutput;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		34A4070A246320D100BD32BB /* CSVirtualCameraOutput */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 34A40711246320D100BD32BB /* Build configuration list for PBXNativeTarget "CSVirtualCameraOutput" */;
+			buildPhases = (
+				34A40707246320D100BD32BB /* Sources */,
+				34A40708246320D100BD32BB /* Frameworks */,
+				34A40709246320D100BD32BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CSVirtualCameraOutput;
+			productName = CSVirtualCameraOutput;
+			productReference = 34A4070B246320D100BD32BB /* CSVirtualCameraOutput.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		34A40703246320D100BD32BB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1120;
+				ORGANIZATIONNAME = Zakk;
+				TargetAttributes = {
+					34A4070A246320D100BD32BB = {
+						CreatedOnToolsVersion = 11.2.1;
+					};
+				};
+			};
+			buildConfigurationList = 34A40706246320D100BD32BB /* Build configuration list for PBXProject "CSVirtualCameraOutput" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 34A40702246320D100BD32BB;
+			productRefGroup = 34A4070C246320D100BD32BB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				34A4070A246320D100BD32BB /* CSVirtualCameraOutput */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		34A40709246320D100BD32BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		34A40707246320D100BD32BB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				34A4073E246327DF00BD32BB /* CSVirtualCameraOutputService.m in Sources */,
+				34A407382463263F00BD32BB /* CSVirtualCameraDevice.m in Sources */,
+				34A4073B2463274D00BD32BB /* CSVirtualCameraOutput.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		34A4070F246320D100BD32BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		34A40710246320D100BD32BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		34A40712246320D100BD32BB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
+				INFOPLIST_FILE = CSVirtualCameraOutput/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSVirtualCameraOutput;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		34A40713246320D100BD32BB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = L3JLUY4S5E;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/../../CocoaSplit/PluginHeaders";
+				INFOPLIST_FILE = CSVirtualCameraOutput/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-undefined",
+					suppress,
+					"-flat_namespace",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = zakk.lol.CSVirtualCameraOutput;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		34A40706246320D100BD32BB /* Build configuration list for PBXProject "CSVirtualCameraOutput" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34A4070F246320D100BD32BB /* Debug */,
+				34A40710246320D100BD32BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		34A40711246320D100BD32BB /* Build configuration list for PBXNativeTarget "CSVirtualCameraOutput" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				34A40712246320D100BD32BB /* Debug */,
+				34A40713246320D100BD32BB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 34A40703246320D100BD32BB /* Project object */;
+}

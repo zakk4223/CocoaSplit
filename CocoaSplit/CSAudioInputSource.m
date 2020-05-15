@@ -390,7 +390,7 @@
         //self.audioVolume = self.audioVolume;
         if (_savedAudioSettings)
         {
-            //[self.audioNode restoreDataFromDict:_savedAudioSettings];
+            [self.audioNode restoreDataFromDict:_savedAudioSettings];
         }
     }
 }

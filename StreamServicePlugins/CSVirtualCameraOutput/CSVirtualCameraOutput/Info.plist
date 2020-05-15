@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,20 +13,14 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
-	<string>BNDL</string>
+	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2016 Zakk. All rights reserved.</string>
+	<string>Copyright © 2020 Zakk. All rights reserved.</string>
 	<key>NSPrincipalClass</key>
-	<string>CSYoutubeStreamService</string>
-	<key>YoutubeClientID</key>
-	<string>963493379025-dhonfmg481m0quul8dbdepfc4954h3lj.apps.googleusercontent.com</string>
-	<key>YoutubeClientSecret</key>
-	<string>EUj7vTJl3c7HqWzplbiq9ItB</string>
+	<string>CSVirtualCameraOutputService</string>
 </dict>
 </plist>

@@ -125,7 +125,13 @@
     }
     
     @synchronized (self) {
+        //If the queue is too deep, start dropping old frames
+        if (_compressQueue.count > 10)
+        {
+            CapturedFrameData *dontCare = [self consumeframeData];
+        }
         [_compressQueue addObject:frameData];
+            
         dispatch_semaphore_signal(_queueSemaphore);
     }
     

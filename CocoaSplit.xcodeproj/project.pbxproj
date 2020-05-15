@@ -408,6 +408,13 @@
 			remoteGlobalIDString = 34799CE2243F0F1300B432BB;
 			remoteInfo = CSLUTFilter;
 		};
+		34A40731246320D200BD32BB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 34A40714246320D100BD32BB /* CSVirtualCameraOutput.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 34A4070B246320D100BD32BB;
+			remoteInfo = CSVirtualCameraOutput;
+		};
 		34A7C1A019B9A41A00BC6882 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 34A7C19C19B9A41900BC6882 /* CSLayoutSwitcherExtraPlugin.xcodeproj */;
@@ -995,6 +1002,7 @@
 		34A27229205D99D000135A5D /* CSTransitionCollectionItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSTransitionCollectionItem.h; sourceTree = "<group>"; };
 		34A2722A205D99D000135A5D /* CSTransitionCollectionItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSTransitionCollectionItem.m; sourceTree = "<group>"; };
 		34A2722B205D99D000135A5D /* CSTransitionCollectionItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSTransitionCollectionItem.xib; sourceTree = "<group>"; };
+		34A40714246320D100BD32BB /* CSVirtualCameraOutput.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CSVirtualCameraOutput.xcodeproj; path = StreamServicePlugins/CSVirtualCameraOutput/CSVirtualCameraOutput.xcodeproj; sourceTree = "<group>"; };
 		34A629431FBB6DC500B4E16A /* CSJSAnimationDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSJSAnimationDelegate.h; sourceTree = "<group>"; };
 		34A629441FBB6DC500B4E16A /* CSJSAnimationDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSJSAnimationDelegate.m; sourceTree = "<group>"; };
 		34A6295D1FBB6F0D00B4E16A /* CSJSAnimationDelegateJSExport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSJSAnimationDelegateJSExport.h; sourceTree = "<group>"; };
@@ -2085,6 +2093,14 @@
 			path = Interface/TransitionSwitcherView;
 			sourceTree = "<group>";
 		};
+		34A40715246320D100BD32BB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				34A40732246320D200BD32BB /* CSVirtualCameraOutput.bundle */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		34A7C19D19B9A41900BC6882 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -2248,6 +2264,7 @@
 		34AFC2E619B08C1E0007C07B /* StreamServicePlugins */ = {
 			isa = PBXGroup;
 			children = (
+				34A40714246320D100BD32BB /* CSVirtualCameraOutput.xcodeproj */,
 				344036782080AF71004BC514 /* CSMixerStreamServicePlugin.xcodeproj */,
 				34BE2B442014F41300E37382 /* CSNewTekNDIStreamServicePlugin.xcodeproj */,
 				3473D2791D4C349700842EEE /* CSVaughnliveStreamServicePlugin.xcodeproj */,
@@ -2653,6 +2670,10 @@
 					ProjectRef = 3473D2791D4C349700842EEE /* CSVaughnliveStreamServicePlugin.xcodeproj */;
 				},
 				{
+					ProductGroup = 34A40715246320D100BD32BB /* Products */;
+					ProjectRef = 34A40714246320D100BD32BB /* CSVirtualCameraOutput.xcodeproj */;
+				},
+				{
 					ProductGroup = 34AFC25519B05B470007C07B /* Products */;
 					ProjectRef = 34576C9819AFE6F7007BAD90 /* CSWindowCapturePlugin.xcodeproj */;
 				},
@@ -2727,6 +2748,13 @@
 			fileType = wrapper.cfbundle;
 			path = CSLUTFilter.plugin;
 			remoteRef = 34799CFA243F0F1400B432BB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		34A40732246320D200BD32BB /* CSVirtualCameraOutput.bundle */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = CSVirtualCameraOutput.bundle;
+			remoteRef = 34A40731246320D200BD32BB /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		34A7C1A119B9A41A00BC6882 /* CSLayoutSwitcherExtraPlugin.bundle */ = {
