@@ -48,6 +48,27 @@
     return @"CocoaSplit VCam";
 }
 
+
+-(void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [super encodeWithCoder:aCoder];
+    [aCoder encodeObject:self.deviceName forKey:@"deviceName"];
+    [aCoder encodeBool:self.persistDevice forKey:@"persistDevice"];
+}
+
+
+-(instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
+        self.deviceName = [aDecoder decodeObjectForKey:@"deviceName"];
+        self.persistDevice = [aDecoder decodeObjectForKey:@"persistDevice"];
+    }
+    
+    return self;
+}
+
+
 -(NSViewController *)getConfigurationView
 {
     
