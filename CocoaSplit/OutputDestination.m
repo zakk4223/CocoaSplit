@@ -428,7 +428,14 @@
     {
         if (self.streamServiceObject)
         {
-            newout = [self.streamServiceObject createOutput];
+            NSString *layoutName = nil;
+            if (self.assignedLayout)
+            {
+                layoutName = self.assignedLayout.name;
+            } else {
+                layoutName = CaptureController.sharedCaptureController.liveLayout.name;
+            }
+            newout = [self.streamServiceObject createOutput:layoutName];
             if (!newout)
             {
                 newout = [[CSOutputBase alloc] init];

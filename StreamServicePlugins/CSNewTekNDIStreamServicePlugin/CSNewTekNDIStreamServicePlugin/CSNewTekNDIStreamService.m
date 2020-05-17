@@ -36,9 +36,7 @@
     return self;
 }
 
-
-
--(NSObject <CSOutputWriterProtocol> *)createOutput
+-(NSObject<CSOutputWriterProtocol> *)createOutput:(NSString *)layoutName
 {
     return [[CSNDIOutput alloc] initWithName:self.sendName];
 }

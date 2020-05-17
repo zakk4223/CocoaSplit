@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSXPCConnection *_XPCconnection;
     id<CSVirtualCameraProtocol> _assistant;
+    
 }
 
 

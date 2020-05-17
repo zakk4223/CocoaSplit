@@ -89,7 +89,7 @@
 }
 
 
--(NSObject <CSOutputWriterProtocol> *)createOutput
+-(NSObject <CSOutputWriterProtocol> *)createOutput:(NSString *)forLayout
 {
     NSObject<CSOutputWriterProtocol>*ret = [super createOutput];
     if (self.segmentFile)

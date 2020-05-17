@@ -11,6 +11,7 @@
 @implementation CSVirtualCameraOutput
 
 
+
 -(bool)queueFramedata:(CapturedFrameData *)frameData
 {
     
@@ -19,24 +20,25 @@
     {
         return NO;
     }
-    if (!_cameraDevice)
+    if (!self.cameraDevice)
     {
-        _cameraDevice = [[CSVirtualCameraDevice alloc] init];
-        _cameraDevice.deviceUID = @"CocoaSplit Test Output";
-        _cameraDevice.frameRate = 60.0f;
-        _cameraDevice.width = CVPixelBufferGetWidth(useImage);
-        _cameraDevice.height = CVPixelBufferGetHeight(useImage);
-        _cameraDevice.name = @"CocoaSplit Test Output";
-        _cameraDevice.pixelFormat = CVPixelBufferGetPixelFormatType(useImage);
-        [_cameraDevice createDeviceWithCompletionBlock:^{
-            _cameraDevice.persistOnDisconnect = NO;
-        }];
+        self.cameraDevice = [[CSVirtualCameraDevice alloc] init];
+        self.cameraDevice.name = self.deviceName;
+        
+        self.cameraDevice.persistOnDisconnect = self.persistDevice;
+        self.cameraDevice.deviceUID = self.cameraDevice.name;
+        self.cameraDevice.frameRate = 1.0f/CMTimeGetSeconds(frameData.videoDuration);
+        self.cameraDevice.width = CVPixelBufferGetWidth(useImage);
+        self.cameraDevice.height = CVPixelBufferGetHeight(useImage);
+        self.cameraDevice.pixelFormat = CVPixelBufferGetPixelFormatType(useImage);
+        [self.cameraDevice createDeviceWithCompletionBlock:nil];
         return NO; //We'll start next frame or so
-    } else if (_cameraDevice.isReady) {
-        [_cameraDevice publishCVPixelBufferFrame:useImage];
+    } else if (self.cameraDevice.isReady) {
+        [self.cameraDevice publishCVPixelBufferFrame:useImage];
         return YES;
     }
     
     return NO;
 }
+
 @end

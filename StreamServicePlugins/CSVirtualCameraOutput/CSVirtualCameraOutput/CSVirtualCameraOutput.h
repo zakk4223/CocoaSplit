@@ -14,8 +14,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface CSVirtualCameraOutput : CSOutputBase
 {
-    CSVirtualCameraDevice *_cameraDevice;
 }
+
+@property (strong) CSVirtualCameraDevice *cameraDevice;
+@property (strong) NSString *deviceName;
+@property (assign) bool persistDevice;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -8,7 +8,7 @@
 
 #import "CSVirtualCameraOutputService.h"
 #import "CSVirtualCameraOutput.h"
-
+#import "CSVirtualCameraOutputViewController.h"
 @implementation CSVirtualCameraOutputService
 
 +(NSString *)label
@@ -16,15 +16,46 @@
     return @"Virtual Camera";
 }
 
--(NSObject <CSOutputWriterProtocol> *)createOutput
+
+-(NSObject<CSOutputWriterProtocol> *)createOutput
 {
-    return [[CSVirtualCameraOutput alloc] init];
+    return [self createOutput:nil];
 }
+
+
+-(NSObject<CSOutputWriterProtocol> *)createOutput:(NSString *)layoutName
+{
+    self.layoutName = layoutName;
+    self.output = [[CSVirtualCameraOutput alloc] init];
+    
+    self.output.deviceName = [self getServiceDestination];
+    self.output.persistDevice = self.persistDevice;
+    return self.output;
+}
+
 
 
 -(NSString *)getServiceDestination
 {
-    return @"COCOASPLIT";
+    if (self.deviceName)
+    {
+        return self.deviceName;
+    }
+    if (self.layoutName)
+    {
+        return [NSString stringWithFormat:@"CocoaSplit - %@", self.layoutName];
+    }
+    return @"CocoaSplit VCam";
+}
+
+-(NSViewController *)getConfigurationView
+{
+    
+     CSVirtualCameraOutputViewController *configViewController;
+    
+    configViewController = [[CSVirtualCameraOutputViewController alloc] initWithNibName:@"CSVirtualCameraOutputViewController" bundle:[NSBundle bundleForClass:self.class]];
+    configViewController.serviceObj = self;
+    return configViewController;
 }
 
 

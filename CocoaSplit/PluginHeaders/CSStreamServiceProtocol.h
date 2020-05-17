@@ -21,6 +21,8 @@
 +(NSImage *)serviceImage;
 +(bool)shouldLoad;
 -(NSObject<CSOutputWriterProtocol> *)createOutput;
+-(NSObject<CSOutputWriterProtocol> *)createOutput:(NSString *)layoutName;
+
 
 -(void)prepareForStreamStart;
 

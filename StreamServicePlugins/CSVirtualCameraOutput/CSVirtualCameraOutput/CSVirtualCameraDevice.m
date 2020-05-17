@@ -67,6 +67,8 @@
     
     [_assistant createDevice:self.name withUID:self.deviceUID withModel:self.modelName withManufacturer:self.manufacturer width:self.width height:self.height pixelFormat:self.pixelFormat frameRate:self.frameRate withReply:^(NSString * _Nonnull uid) {
         self.isReady = YES;
+        [_assistant setInternalClock:self.useInternalClock forDevice:self.deviceUID];
+        [_assistant setPersistOnDisconnect:self.persistOnDisconnect forDevice:self.deviceUID];
        if (completionBlock)
        {
            completionBlock();
@@ -94,7 +96,36 @@
     {
         [self publishIOSurfaceFrame:bufferSurface];
     } else {
-        //Supported later
+        NSMutableDictionary *ioProperties = [NSMutableDictionary dictionary];
+        ioProperties[(id)kCVPixelBufferIOSurfacePropertiesKey] = @{};
+        CVPixelBufferRef newPixelBuffer = NULL;
+        CVPixelBufferCreate(kCFAllocatorDefault, CVPixelBufferGetWidth(videoFrame), CVPixelBufferGetHeight(videoFrame), CVPixelBufferGetPixelFormatType(videoFrame), (__bridge CFDictionaryRef _Nullable)(ioProperties), &newPixelBuffer);
+
+        
+        NSUInteger planeCnt = CVPixelBufferGetPlaneCount(videoFrame);
+        CVPixelBufferLockBaseAddress(videoFrame, kCVPixelBufferLock_ReadOnly);
+        CVPixelBufferLockBaseAddress(newPixelBuffer, 0);
+        if (!planeCnt)
+        {
+
+            void *srcAddr = CVPixelBufferGetBaseAddress(videoFrame);
+            void *dstAddr = CVPixelBufferGetBaseAddress(newPixelBuffer);
+            memcpy(dstAddr, srcAddr, CVPixelBufferGetDataSize(videoFrame));
+        } else {
+
+            for(NSUInteger i = 0; i < planeCnt; i++)
+            {
+
+                void *srcAddr = CVPixelBufferGetBaseAddressOfPlane(videoFrame, i);
+                void *dstAddr = CVPixelBufferGetBaseAddressOfPlane(newPixelBuffer, i);
+                memcpy(dstAddr, srcAddr, CVPixelBufferGetBytesPerRowOfPlane(videoFrame, i) * CVPixelBufferGetWidthOfPlane(videoFrame, i));
+                
+            }
+        }
+        CVPixelBufferUnlockBaseAddress(newPixelBuffer, 0);
+        CVPixelBufferUnlockBaseAddress(videoFrame, kCVPixelBufferLock_ReadOnly);
+        [self publishIOSurfaceFrame:(__bridge IOSurface *)CVPixelBufferGetIOSurface(newPixelBuffer)];
+        CVPixelBufferRelease(newPixelBuffer);
     }
 }
 

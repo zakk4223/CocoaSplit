@@ -52,9 +52,14 @@
     return nil;
 }
 
--(NSObject<CSOutputWriterProtocol> *)createOutput;
+-(NSObject<CSOutputWriterProtocol> *)createOutput
 {
     return [[CSLavfOutput alloc] init];
+}
+
+-(NSObject<CSOutputWriterProtocol> *)createOutput:(NSString *)forLayout
+{
+    return [self createOutput];
 }
 
 

@@ -7,12 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		340232B72470A28800B61BF1 /* CSVirtualCameraOutputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340232B52470A28800B61BF1 /* CSVirtualCameraOutputViewController.m */; };
+		340232B82470A28800B61BF1 /* CSVirtualCameraOutputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 340232B62470A28800B61BF1 /* CSVirtualCameraOutputViewController.xib */; };
 		34A407382463263F00BD32BB /* CSVirtualCameraDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A407372463263F00BD32BB /* CSVirtualCameraDevice.m */; };
 		34A4073B2463274D00BD32BB /* CSVirtualCameraOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A4073A2463274D00BD32BB /* CSVirtualCameraOutput.m */; };
 		34A4073E246327DF00BD32BB /* CSVirtualCameraOutputService.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A4073D246327DF00BD32BB /* CSVirtualCameraOutputService.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		340232B42470A28800B61BF1 /* CSVirtualCameraOutputViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSVirtualCameraOutputViewController.h; sourceTree = "<group>"; };
+		340232B52470A28800B61BF1 /* CSVirtualCameraOutputViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSVirtualCameraOutputViewController.m; sourceTree = "<group>"; };
+		340232B62470A28800B61BF1 /* CSVirtualCameraOutputViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CSVirtualCameraOutputViewController.xib; sourceTree = "<group>"; };
 		34A4070B246320D100BD32BB /* CSVirtualCameraOutput.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CSVirtualCameraOutput.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		34A4070E246320D100BD32BB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34A407362463263F00BD32BB /* CSVirtualCameraDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSVirtualCameraDevice.h; sourceTree = "<group>"; };
@@ -60,6 +65,9 @@
 				34A4073A2463274D00BD32BB /* CSVirtualCameraOutput.m */,
 				34A4073C246327DF00BD32BB /* CSVirtualCameraOutputService.h */,
 				34A4073D246327DF00BD32BB /* CSVirtualCameraOutputService.m */,
+				340232B42470A28800B61BF1 /* CSVirtualCameraOutputViewController.h */,
+				340232B52470A28800B61BF1 /* CSVirtualCameraOutputViewController.m */,
+				340232B62470A28800B61BF1 /* CSVirtualCameraOutputViewController.xib */,
 			);
 			path = CSVirtualCameraOutput;
 			sourceTree = "<group>";
@@ -121,6 +129,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				340232B82470A28800B61BF1 /* CSVirtualCameraOutputViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +142,7 @@
 			files = (
 				34A4073E246327DF00BD32BB /* CSVirtualCameraOutputService.m in Sources */,
 				34A407382463263F00BD32BB /* CSVirtualCameraDevice.m in Sources */,
+				340232B72470A28800B61BF1 /* CSVirtualCameraOutputViewController.m in Sources */,
 				34A4073B2463274D00BD32BB /* CSVirtualCameraOutput.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -21,7 +21,9 @@
         _pixelFormats = @{@"RGBA": @(kCVPixelFormatType_32RGBA),
                           @"ARGB": @(kCVPixelFormatType_32ARGB),
                           @"BGRA": @(kCVPixelFormatType_32BGRA),
-                          @"422 YpCbCr8 (2vuy/UYVY)": @(kCVPixelFormatType_422YpCbCr8)
+                          @"422 YpCbCr8 (2vuy/UYVY)": @(kCVPixelFormatType_422YpCbCr8),
+                          @"Planar Component Y'CbCr 8-bit 4:2:0 (y420)": @(kCVPixelFormatType_420YpCbCr8Planar),
+                          @"Component Y'CbCr 8-bit 4:2:2 (yuvs)": @(kCVPixelFormatType_422YpCbCr8_yuvs)
                           };
     }
     
@@ -97,13 +99,16 @@
         {
             VTPixelTransferSessionCreate(NULL, &_pvt_ref);
         }
+        
+
         OSType useFormat = CVPixelBufferGetPixelFormatType(imageBuffer.videoFrame);
         if (self.usePixelFormat)
         {
             useFormat = (OSType)self.usePixelFormat.integerValue;
         }
-        
-        CVPixelBufferCreate(NULL, CVPixelBufferGetWidth(imageBuffer.videoFrame), CVPixelBufferGetHeight(imageBuffer.videoFrame), useFormat, NULL, &useFrame);
+        NSMutableDictionary *ioProperties = [NSMutableDictionary dictionary];
+        ioProperties[(id)kCVPixelBufferIOSurfacePropertiesKey] = @{};
+        CVPixelBufferCreate(NULL, CVPixelBufferGetWidth(imageBuffer.videoFrame), CVPixelBufferGetHeight(imageBuffer.videoFrame), useFormat, (__bridge CFDictionaryRef _Nullable)(ioProperties), &useFrame);
         VTPixelTransferSessionTransferImage(_pvt_ref, imageBuffer.videoFrame, useFrame);
     } else {
         useFrame = imageBuffer.videoFrame;

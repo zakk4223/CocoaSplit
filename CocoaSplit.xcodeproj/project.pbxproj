@@ -13,6 +13,7 @@
 		3400A07A1BD4533A003E1828 /* CSInputLibraryWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3400A0781BD4533A003E1828 /* CSInputLibraryWindowController.xib */; };
 		3400A07E1BD49406003E1828 /* CSInputLibraryItemView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3400A07D1BD49406003E1828 /* CSInputLibraryItemView.xib */; };
 		3400A0841BD522A5003E1828 /* CSLibraryInputItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3400A0831BD522A5003E1828 /* CSLibraryInputItemViewController.m */; };
+		34023294246FB96400B61BF1 /* CSVirtualCameraOutput.bundle in Copy Files */ = {isa = PBXBuildFile; fileRef = 34A40732246320D200BD32BB /* CSVirtualCameraOutput.bundle */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		34027499203B6C4B0099328C /* CSColorWell.m in Sources */ = {isa = PBXBuildFile; fileRef = 34027498203B6C4B0099328C /* CSColorWell.m */; };
 		340274B5203B98130099328C /* CSUndoObjectController.m in Sources */ = {isa = PBXBuildFile; fileRef = 340274B4203B98130099328C /* CSUndoObjectController.m */; };
 		340620761F2E2BFE0016D997 /* CAMultiAudioInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 340620751F2E2BFE0016D997 /* CAMultiAudioInput.m */; };
@@ -623,6 +624,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				34023294246FB96400B61BF1 /* CSVirtualCameraOutput.bundle in Copy Files */,
 				34799D14243F165100B432BB /* CSLUTFilter.plugin in Copy Files */,
 				34A8883622A5CB5F0023D8B9 /* CSSyphonCapturePlugin.bundle in Copy Files */,
 				34E88C9E218DB0A90053913B /* CSAppleWebViewCapturePlugin.bundle in Copy Files */,

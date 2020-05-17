@@ -8,10 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "CSStreamServiceBase.h"
-
+#import "CSVirtualCameraOutput.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CSVirtualCameraOutputService : CSStreamServiceBase
+@property (strong) CSVirtualCameraOutput *output;
+@property (strong) NSString *layoutName;
+@property (strong) NSString *deviceName;
+@property (assign) bool persistDevice;
 
 @end
 

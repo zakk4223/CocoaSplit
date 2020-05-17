@@ -16,7 +16,7 @@
 +(NSString *)label;
 +(NSString *)serviceDescription;
 +(NSImage *)serviceImage;
--(NSObject<CSOutputWriterProtocol> *)createOutput;
+-(NSObject<CSOutputWriterProtocol> *)createOutput:(NSString *)layoutName;
 +(bool)shouldLoad;
 
 
