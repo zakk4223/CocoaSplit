@@ -83,6 +83,18 @@
 }
 
 
+-(void)createPixelBufferPool
+{
+
+        NSMutableDictionary *attributes = [NSMutableDictionary dictionary];
+        [attributes setValue:[NSNumber numberWithInt:self.width] forKey:(NSString *)kCVPixelBufferWidthKey];
+        [attributes setValue:[NSNumber numberWithInt:self.height] forKey:(NSString *)kCVPixelBufferHeightKey];
+        [attributes setValue:@{} forKey:(NSString *)kCVPixelBufferIOSurfacePropertiesKey];
+        [attributes setValue:[NSNumber numberWithUnsignedInt:self.pixelFormat] forKey:(NSString *)kCVPixelBufferPixelFormatTypeKey];
+        CVPixelBufferPoolCreate(NULL, NULL, (__bridge CFDictionaryRef)(attributes), &_pixelBufferPool);
+}
+ 
+
 -(void)publishCVPixelBufferFrame:(CVPixelBufferRef)videoFrame
 {
     if (!_assistant)
@@ -90,43 +102,40 @@
         return;
     }
     
+    OSType pixelFormat = CVPixelBufferGetPixelFormatType(videoFrame);
+    CVPixelBufferRef outputBuffer = NULL;
+    
     IOSurface *bufferSurface = (__bridge IOSurface *)(CVPixelBufferGetIOSurface(videoFrame));
     
+    if (pixelFormat != self.pixelFormat || !bufferSurface)
+    {
+        //We have to copy and/or convert
+        if (!_pixelBufferPool)
+        {
+            [self createPixelBufferPool];
+        }
+        
+        if (!_transferSession)
+        {
+            VTPixelTransferSessionCreate(NULL, &_transferSession);
+        }
+        
+
+        CVPixelBufferPoolCreatePixelBuffer(NULL, _pixelBufferPool, &outputBuffer);
+        VTPixelTransferSessionTransferImage(_transferSession, videoFrame, outputBuffer);
+        bufferSurface = (__bridge IOSurface *)(CVPixelBufferGetIOSurface(outputBuffer));
+        
+    }
     if (bufferSurface)
     {
         [self publishIOSurfaceFrame:bufferSurface];
-    } else {
-        NSMutableDictionary *ioProperties = [NSMutableDictionary dictionary];
-        ioProperties[(id)kCVPixelBufferIOSurfacePropertiesKey] = @{};
-        CVPixelBufferRef newPixelBuffer = NULL;
-        CVPixelBufferCreate(kCFAllocatorDefault, CVPixelBufferGetWidth(videoFrame), CVPixelBufferGetHeight(videoFrame), CVPixelBufferGetPixelFormatType(videoFrame), (__bridge CFDictionaryRef _Nullable)(ioProperties), &newPixelBuffer);
-
-        
-        NSUInteger planeCnt = CVPixelBufferGetPlaneCount(videoFrame);
-        CVPixelBufferLockBaseAddress(videoFrame, kCVPixelBufferLock_ReadOnly);
-        CVPixelBufferLockBaseAddress(newPixelBuffer, 0);
-        if (!planeCnt)
-        {
-
-            void *srcAddr = CVPixelBufferGetBaseAddress(videoFrame);
-            void *dstAddr = CVPixelBufferGetBaseAddress(newPixelBuffer);
-            memcpy(dstAddr, srcAddr, CVPixelBufferGetDataSize(videoFrame));
-        } else {
-
-            for(NSUInteger i = 0; i < planeCnt; i++)
-            {
-
-                void *srcAddr = CVPixelBufferGetBaseAddressOfPlane(videoFrame, i);
-                void *dstAddr = CVPixelBufferGetBaseAddressOfPlane(newPixelBuffer, i);
-                memcpy(dstAddr, srcAddr, CVPixelBufferGetBytesPerRowOfPlane(videoFrame, i) * CVPixelBufferGetWidthOfPlane(videoFrame, i));
-                
-            }
-        }
-        CVPixelBufferUnlockBaseAddress(newPixelBuffer, 0);
-        CVPixelBufferUnlockBaseAddress(videoFrame, kCVPixelBufferLock_ReadOnly);
-        [self publishIOSurfaceFrame:(__bridge IOSurface *)CVPixelBufferGetIOSurface(newPixelBuffer)];
-        CVPixelBufferRelease(newPixelBuffer);
     }
+
+    if (outputBuffer)
+    {
+        CVPixelBufferRelease(outputBuffer);
+    }
+    
 }
 
 

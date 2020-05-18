@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) CSVirtualCameraDevice *cameraDevice;
 @property (strong) NSString *deviceName;
 @property (assign) bool persistDevice;
+@property (strong) NSNumber *pixelFormat;
 
 @end
 

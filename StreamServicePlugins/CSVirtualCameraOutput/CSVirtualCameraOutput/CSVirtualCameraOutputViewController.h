@@ -12,8 +12,12 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CSVirtualCameraOutputViewController : NSViewController
+{
+    
+}
 @property (weak) CSVirtualCameraOutputService *serviceObj;
-
+@property (strong) NSDictionary *pixelFormats;
+@property (strong) NSArray *formatSortDescriptors;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -27,9 +27,9 @@
 {
     self.layoutName = layoutName;
     self.output = [[CSVirtualCameraOutput alloc] init];
-    
     self.output.deviceName = [self getServiceDestination];
     self.output.persistDevice = self.persistDevice;
+    self.output.pixelFormat = self.pixelFormat;
     return self.output;
 }
 
@@ -49,11 +49,23 @@
 }
 
 
+-(instancetype) init
+{
+    if (self = [super init])
+    {
+        self.pixelFormat = @(kCVPixelFormatType_32BGRA);
+    }
+    
+    return self;
+}
+
+
 -(void)encodeWithCoder:(NSCoder *)aCoder
 {
     [super encodeWithCoder:aCoder];
     [aCoder encodeObject:self.deviceName forKey:@"deviceName"];
     [aCoder encodeBool:self.persistDevice forKey:@"persistDevice"];
+    [aCoder encodeObject:self.pixelFormat forKey:@"pixelFormat"];
 }
 
 
@@ -63,6 +75,7 @@
     {
         self.deviceName = [aDecoder decodeObjectForKey:@"deviceName"];
         self.persistDevice = [aDecoder decodeObjectForKey:@"persistDevice"];
+        self.pixelFormat = [aDecoder decodeObjectForKey:@"pixelFormat"];
     }
     
     return self;

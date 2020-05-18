@@ -30,7 +30,13 @@
         self.cameraDevice.frameRate = 1.0f/CMTimeGetSeconds(frameData.videoDuration);
         self.cameraDevice.width = CVPixelBufferGetWidth(useImage);
         self.cameraDevice.height = CVPixelBufferGetHeight(useImage);
-        self.cameraDevice.pixelFormat = CVPixelBufferGetPixelFormatType(useImage);
+        if (self.pixelFormat)
+        {
+            self.cameraDevice.pixelFormat = self.pixelFormat.intValue;
+        } else {
+            self.cameraDevice.pixelFormat = kCVPixelFormatType_32BGRA;
+        }
+        
         [self.cameraDevice createDeviceWithCompletionBlock:nil];
         return NO; //We'll start next frame or so
     } else if (self.cameraDevice.isReady) {
@@ -41,4 +47,14 @@
     return NO;
 }
 
+-(void)dealloc
+{
+    if (self.cameraDevice)
+    {
+        if (!self.cameraDevice.persistOnDisconnect)
+        {
+            [self.cameraDevice destroyDevice];
+        }
+    }
+}
 @end

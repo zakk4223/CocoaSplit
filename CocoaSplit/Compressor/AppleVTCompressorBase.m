@@ -10,7 +10,7 @@
 #import "OutputDestination.h"
 #import "CSAppleH264CompressorViewController.h"
 #import "CSPluginServices.h"
-
+#import <VideoToolbox/VideoToolbox.h>
 
 OSStatus VTCompressionSessionCopySupportedPropertyDictionary(VTCompressionSessionRef, CFDictionaryRef *);
 
@@ -168,7 +168,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
      */
     frameProperties = NULL;
     //}
-    
+
     /*
     if (!_vtpt_ref)
     {
@@ -176,6 +176,7 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
         VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
         VTSessionSetProperty(_vtpt_ref, kVTPixelTransferPropertyKey_RealTime, kCFBooleanTrue);
     }
+    
     CVPixelBufferRef converted_frame;
     
     CVImageBufferRef imageBuffer = frameData.videoFrame;
@@ -260,7 +261,9 @@ void PixelBufferRelease( void *releaseRefCon, const void *baseAddress )
     
     CFMutableDictionaryRef transferProps = CFDictionaryCreateMutable(kCFAllocatorDefault, 0, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
     CFDictionarySetValue(transferProps, kVTPixelTransferPropertyKey_ScalingMode, kVTScalingMode_Letterbox);
-    CFDictionarySetValue(transferProps, kVTPixelTransferPropertyKey_DestinationTransferFunction, kCVImageBufferTransferFunction_ITU_R_709_2);
+    //CFDictionarySetValue(transferProps, kVTPixelTransferPropertyKey_DestinationTransferFunction, kCVImageBufferTransferFunction_ITU_R_709_2);
+    CFDictionarySetValue(transferProps, CFSTR("RealTime"), kCFBooleanTrue);
+    
     VTSessionSetProperty(_compression_session, kVTCompressionPropertyKey_PixelTransferProperties, transferProps);
     CFRelease(transferProps);
     

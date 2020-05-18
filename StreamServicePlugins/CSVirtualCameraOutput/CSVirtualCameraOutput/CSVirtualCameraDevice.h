@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreVideo/CoreVideo.h>
 #import <IOSurface/IOSurfaceObjC.h>
+#import <VideoToolbox/VideoToolbox.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -27,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 {
     NSXPCConnection *_XPCconnection;
     id<CSVirtualCameraProtocol> _assistant;
+    VTPixelTransferSessionRef _transferSession;
+    CVPixelBufferPoolRef _pixelBufferPool;
     
 }
 

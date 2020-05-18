@@ -22,12 +22,12 @@
 
         _layoutChanged = NO;
         bool systemMetal = CaptureController.sharedCaptureController.useMetalIfAvailable;
-        
         if (systemMetal && [CARenderer instancesRespondToSelector:@selector(setDestination:)])
         {
             NSLog(@"USING METAL RENDERER");
             _useMetalRenderer = YES; //CArenderer supports swapping the destination Metal texture on the fly
             _metalDevice = MTLCreateSystemDefaultDevice();
+            _metalQueue = [_metalDevice newCommandQueue];
             [self createMetalTextureCache];
             
         } else {
@@ -210,6 +210,14 @@
         [self.renderer addUpdateRect:self.renderer.bounds];
         [self.renderer render];
         [self.renderer endFrame];
+        /*
+        id<MTLCommandBuffer> cmdBuffer = [_metalQueue commandBuffer];
+        id<MTLBlitCommandEncoder> blitEnc = [cmdBuffer blitCommandEncoder];
+        [blitEnc synchronizeResource:CVMetalTextureGetTexture(mtlTexture)];
+        [blitEnc endEncoding];
+        [cmdBuffer commit];
+        [cmdBuffer waitUntilCompleted];
+         */
         CFRelease(mtlTexture);
             
         return;

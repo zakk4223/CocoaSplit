@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SourceLayout.h"
+#import <Metal/Metal.h>
 
 typedef struct CV_BRIDGED_TYPE(id) __CVMetalTextureCache *CVMetalTextureCacheRef;
 typedef CVImageBufferRef CVMetalTextureRef;
@@ -47,6 +48,8 @@ CV_EXPORT CVReturn CVMetalTextureCacheCreate(
     SourceLayout *_currentLayout;
     bool _useMetalRenderer;
     id <MTLDevice> _metalDevice;
+    id <MTLCommandQueue> _metalQueue;
+    
     
 }
 

@@ -17,19 +17,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xog-xk-Nf6">
-                    <rect key="frame" x="18" y="234" width="90" height="16"/>
+                    <rect key="frame" x="-2" y="236" width="90" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" lineBreakMode="clipping" title="Camera Name" id="7aA-Rb-fl7">
-                        <font key="font" usesAppearanceFont="YES"/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Camera Name" id="7aA-Rb-fl7">
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V8o-P0-sOm">
-                    <rect key="frame" x="114" y="231" width="132" height="21"/>
+                    <rect key="frame" x="94" y="233" width="201" height="19"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Oor-H9-ckR">
-                        <font key="font" metaFont="system"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Oor-H9-ckR">
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -38,19 +38,55 @@
                     </connections>
                 </textField>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gqU-gi-tWj">
-                    <rect key="frame" x="18" y="207" width="108" height="18"/>
+                    <rect key="frame" x="-3" y="151" width="109" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Persist on exit" bezelStyle="regularSquare" imagePosition="trailing" state="on" inset="2" id="eKG-XL-xsx">
+                    <buttonCell key="cell" type="check" title="Persist on exit" bezelStyle="regularSquare" imagePosition="trailing" controlSize="small" state="on" inset="2" id="eKG-XL-xsx">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
                     <connections>
                         <binding destination="nwA-xG-m6e" name="value" keyPath="selection.persistDevice" id="NQb-Pv-c3h"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7bH-Sg-CoI">
+                    <rect key="frame" x="-2" y="205" width="93" height="14"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Output Format" id="e3P-XR-5y7">
+                        <font key="font" metaFont="controlContent" size="11"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kx6-W9-fUt">
+                    <rect key="frame" x="94" y="199" width="204" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="jHh-pz-ac7" id="xWr-KO-x32">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
+                        <menu key="menu" id="oNd-Gf-6Ss">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="jHh-pz-ac7"/>
+                                <menuItem title="Item 2" id="EfX-Bk-Uxg"/>
+                                <menuItem title="Item 3" id="bJU-ex-fZP"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="cNV-F2-BRe" name="content" keyPath="arrangedObjects" id="Njd-be-fAO"/>
+                        <binding destination="cNV-F2-BRe" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Njd-be-fAO" id="gzX-ra-5WR"/>
+                        <binding destination="cNV-F2-BRe" name="contentValues" keyPath="arrangedObjects.key" previousBinding="gzX-ra-5WR" id="AWB-3K-3Ey"/>
+                        <binding destination="nwA-xG-m6e" name="selectedObject" keyPath="selection.pixelFormat" previousBinding="AWB-3K-3Ey" id="Raw-tR-Bk9"/>
+                    </connections>
+                </popUpButton>
             </subviews>
             <point key="canvasLocation" x="140" y="154"/>
         </customView>
+        <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="cNV-F2-BRe" userLabel="PixelFormatsController">
+            <connections>
+                <binding destination="-2" name="contentDictionary" keyPath="self.pixelFormats" id="eUP-Tn-gEp"/>
+                <binding destination="-2" name="sortDescriptors" keyPath="self.formatSortDescriptors" id="gfW-Yl-5kV"/>
+            </connections>
+        </dictionaryController>
         <objectController id="nwA-xG-m6e">
             <connections>
                 <binding destination="-2" name="contentObject" keyPath="self.serviceObj" id="jlu-iQ-kTU"/>
