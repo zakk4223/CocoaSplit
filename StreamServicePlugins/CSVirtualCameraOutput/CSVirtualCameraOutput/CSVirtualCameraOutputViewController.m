@@ -16,8 +16,6 @@
 
 
 
-
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.pixelFormats = @{@"RGBA": @(kCVPixelFormatType_32RGBA),

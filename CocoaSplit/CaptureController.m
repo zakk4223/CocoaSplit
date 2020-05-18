@@ -707,7 +707,7 @@ NSString *const CSAppearanceSystem = @"CSAppearanceSystem";
             
             toDelete.isActive = NO;
             [self.sourceLayoutsArrayController removeObject:toDelete];
-            [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutDeleted forObject:self];
+            [CaptureController.sharedCaptureController postNotification:CSNotificationLayoutDeleted forObject:toDelete];
             return YES;
         }
     }
