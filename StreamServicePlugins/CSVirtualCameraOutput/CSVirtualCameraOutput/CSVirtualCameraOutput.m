@@ -7,7 +7,9 @@
 //
 
 #import "CSVirtualCameraOutput.h"
+#import "CSPluginServices.h"
 
+#import <AVFoundation/AVFoundation.h>
 @implementation CSVirtualCameraOutput
 
 
@@ -26,7 +28,7 @@
         self.cameraDevice.name = self.deviceName;
         
         self.cameraDevice.persistOnDisconnect = self.persistDevice;
-        self.cameraDevice.deviceUID = self.cameraDevice.name;
+        self.cameraDevice.deviceUID = [NSString stringWithFormat:@"0x145424105986211e"];
         self.cameraDevice.frameRate = 1.0f/CMTimeGetSeconds(frameData.videoDuration);
         self.cameraDevice.width = CVPixelBufferGetWidth(useImage);
         self.cameraDevice.height = CVPixelBufferGetHeight(useImage);
@@ -37,14 +39,50 @@
             self.cameraDevice.pixelFormat = kCVPixelFormatType_32BGRA;
         }
         
+        
         [self.cameraDevice createDeviceWithCompletionBlock:nil];
-        return NO; //We'll start next frame or so
     } else if (self.cameraDevice.isReady) {
         [self.cameraDevice publishCVPixelBufferFrame:useImage];
-        return YES;
     }
     
-    return NO;
+    if (self.audioOutputDevice)
+    {
+        NSString *audioTrackkey = nil;
+        
+        if (self.activeAudioTracks && (self.activeAudioTracks.allKeys.count > 0))
+        {
+            audioTrackkey = self.activeAudioTracks.allKeys.firstObject;
+        }
+        
+        if (!audioTrackkey)
+        {
+            audioTrackkey = frameData.pcmAudioSamples.allKeys.firstObject;
+        }
+        
+        NSArray *pcmSamples = frameData.pcmAudioSamples[audioTrackkey];
+        
+        for (id object in pcmSamples)
+        {
+            
+            CMSampleBufferRef audioSample = (__bridge CMSampleBufferRef)object;
+            CMFormatDescriptionRef sampleAudioFormat = CMSampleBufferGetFormatDescription(audioSample);
+
+            AVAudioFormat *audioFormat = [[AVAudioFormat alloc] initWithCMAudioFormatDescription:sampleAudioFormat];
+            if (!_audioOutput)
+            {
+                _audioOutput = [CSPluginServices.sharedPluginServices systemAudioOutputForFormat:audioFormat forDevice:self.audioOutputDevice];
+                [_audioOutput start];
+            }
+            
+            if (!_audioOutput)
+            {
+                break;
+            }
+            
+            [_audioOutput playSampleBuffer:audioSample];
+        }
+    }
+    return YES;
 }
 
 -(void)dealloc

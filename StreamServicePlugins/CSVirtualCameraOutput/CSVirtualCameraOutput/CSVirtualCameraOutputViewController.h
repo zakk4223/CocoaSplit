@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak) CSVirtualCameraOutputService *serviceObj;
 @property (strong) NSDictionary *pixelFormats;
 @property (strong) NSArray *formatSortDescriptors;
+@property (strong) NSArray *audioOutputs;
+
 @end
 
 NS_ASSUME_NONNULL_END

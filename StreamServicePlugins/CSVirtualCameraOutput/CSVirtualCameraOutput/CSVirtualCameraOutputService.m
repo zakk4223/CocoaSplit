@@ -30,6 +30,7 @@
     self.output.deviceName = [self getServiceDestination];
     self.output.persistDevice = self.persistDevice;
     self.output.pixelFormat = self.pixelFormat;
+    self.output.audioOutputDevice = self.audioOutput;
     return self.output;
 }
 
@@ -66,6 +67,7 @@
     [aCoder encodeObject:self.deviceName forKey:@"deviceName"];
     [aCoder encodeBool:self.persistDevice forKey:@"persistDevice"];
     [aCoder encodeObject:self.pixelFormat forKey:@"pixelFormat"];
+    [aCoder encodeObject:self.audioOutput.deviceUID forKey:@"audioOutputDeviceUID"];
 }
 
 
@@ -76,6 +78,7 @@
         self.deviceName = [aDecoder decodeObjectForKey:@"deviceName"];
         self.persistDevice = [aDecoder decodeObjectForKey:@"persistDevice"];
         self.pixelFormat = [aDecoder decodeObjectForKey:@"pixelFormat"];
+        self.audioOutputDeviceUID = [aDecoder decodeObjectForKey:@"audioOutputDeviceUID"];
     }
     
     return self;

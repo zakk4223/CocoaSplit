@@ -13,6 +13,7 @@
 #import "CSPcmPlayer.h"
 #import "AppDelegate.h"
 #import "PreviewView.h"
+#import "CASimpleOutputGraph.h"
 
 
 @implementation CSPluginServices
@@ -189,6 +190,18 @@
 {
 
     return [[CSOauth2Authenticator alloc] initWithServiceName:serviceName clientID:client_id flowType:flow_type config:config_dict];
+}
+
+-(NSArray *)audioOutputs
+{
+    return [[CAMultiAudioDevice allDevices] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"hasOutput == YES"]];
+    
+}
+
+-(CSSystemAudioOutput *)systemAudioOutputForFormat:(AVAudioFormat *)audioFormat forDevice:(CSSystemAudioNode *)device
+{
+    CASimpleOutputGraph *systemOutput = [[CASimpleOutputGraph alloc] initWithAudioFormat:audioFormat withOutputNode:(CAMultiAudioDevice *)device];
+    return (CSSystemAudioOutput *)systemOutput;
 }
 
 

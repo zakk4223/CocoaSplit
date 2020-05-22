@@ -263,6 +263,7 @@
 		34DA1D3E1BF823E700132486 /* CSNewOutputWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DA1D3C1BF823E700132486 /* CSNewOutputWindowController.m */; };
 		34DA1D3F1BF823E700132486 /* CSNewOutputWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34DA1D3D1BF823E700132486 /* CSNewOutputWindowController.xib */; };
 		34DC2FB01B512362008F12A2 /* CSCaptureBase+TimerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */; };
+		34DF0885247663CC00DDA606 /* CASimpleOutputGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF0884247663CC00DDA606 /* CASimpleOutputGraph.m */; };
 		34DF75581AA272F100DA9FDE /* LayoutRenderer.m in Sources */ = {isa = PBXBuildFile; fileRef = 34DF75571AA272F100DA9FDE /* LayoutRenderer.m */; };
 		34E26DDC1FF702BD00ACE58B /* CAMultiAudioSilence.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDB1FF702BD00ACE58B /* CAMultiAudioSilence.m */; };
 		34E26DDF1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 34E26DDE1FF70E0E00ACE58B /* CAMultiAudioGenericOutput.m */; };
@@ -1108,6 +1109,10 @@
 		34DC2F9B1B50FBCD008F12A2 /* CSTimerSourceProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSTimerSourceProtocol.h; sourceTree = "<group>"; };
 		34DC2FAE1B512362008F12A2 /* CSCaptureBase+TimerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CSCaptureBase+TimerDelegate.h"; sourceTree = "<group>"; };
 		34DC2FAF1B512362008F12A2 /* CSCaptureBase+TimerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CSCaptureBase+TimerDelegate.m"; sourceTree = "<group>"; };
+		34DF0883247663CC00DDA606 /* CASimpleOutputGraph.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CASimpleOutputGraph.h; path = CAMultiAudio/CASimpleOutputGraph.h; sourceTree = "<group>"; };
+		34DF0884247663CC00DDA606 /* CASimpleOutputGraph.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = CASimpleOutputGraph.m; path = CAMultiAudio/CASimpleOutputGraph.m; sourceTree = "<group>"; };
+		34DF08A32477AC5900DDA606 /* CSSystemAudioOutput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSSystemAudioOutput.h; path = PluginHeaders/CSSystemAudioOutput.h; sourceTree = "<group>"; };
+		34DF08A52477B0D500DDA606 /* CSSystemAudioNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CSSystemAudioNode.h; path = PluginHeaders/CSSystemAudioNode.h; sourceTree = "<group>"; };
 		34DF75561AA272F100DA9FDE /* LayoutRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LayoutRenderer.h; sourceTree = "<group>"; };
 		34DF75571AA272F100DA9FDE /* LayoutRenderer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LayoutRenderer.m; sourceTree = "<group>"; };
 		34E26DDA1FF702BD00ACE58B /* CAMultiAudioSilence.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CAMultiAudioSilence.h; path = CAMultiAudio/CAMultiAudioSilence.h; sourceTree = "<group>"; };
@@ -1886,6 +1891,8 @@
 				3408234619BC50AD00CD1F5F /* CSNotifications.h */,
 				34DBBAB2201412FC00B3DFFD /* CSOutputBase.h */,
 				34A77454201449450036F8B5 /* CSStreamServiceBase.h */,
+				34DF08A32477AC5900DDA606 /* CSSystemAudioOutput.h */,
+				34DF08A52477B0D500DDA606 /* CSSystemAudioNode.h */,
 			);
 			name = PluginHeaders;
 			sourceTree = "<group>";
@@ -1973,6 +1980,8 @@
 				3488161923FE9BBF00FF4E1B /* CAMultiAudioConnection.m */,
 				3488161E2401010B00FF4E1B /* CAMultiAudioOutputTrackConnection.h */,
 				3488161F2401010B00FF4E1B /* CAMultiAudioOutputTrackConnection.m */,
+				34DF0883247663CC00DDA606 /* CASimpleOutputGraph.h */,
+				34DF0884247663CC00DDA606 /* CASimpleOutputGraph.m */,
 			);
 			name = CAMultiAudio;
 			sourceTree = "<group>";
@@ -3140,6 +3149,7 @@
 				34ED8C551B07371C002C0674 /* MIKMIDIControlChangeCommand.m in Sources */,
 				345BECFB1F455AF700B46F29 /* CSCIFilterLayoutTransitionViewController.m in Sources */,
 				34F80D6D1EDBC8C800D890D3 /* OutputDestination+ScriptingAdditions.m in Sources */,
+				34DF0885247663CC00DDA606 /* CASimpleOutputGraph.m in Sources */,
 				3494DF381CCD2DB000E921BF /* TPCircularBuffer.c in Sources */,
 				349461681ABC57C100F28883 /* CSAnimationItem.m in Sources */,
 				347DBC9D1FF22C0100B98D5E /* CSAppleHEVCCompressor.m in Sources */,

@@ -26,6 +26,7 @@
 @property (weak) CAMultiAudioEngine *engine;
 @property (assign) bool running;
 @property (strong) CAMultiAudioDevice *outputNode;
+@property (assign) bool isSimple;
 
 
 -(instancetype)initWithFormat:(AVAudioFormat *)format;

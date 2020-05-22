@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CSStreamServiceBase.h"
 #import "CSVirtualCameraOutput.h"
+#import "CSSystemAudioNode.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CSVirtualCameraOutputService : CSStreamServiceBase
@@ -16,7 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString *layoutName;
 @property (strong) NSString *deviceName;
 @property (strong) NSNumber *pixelFormat;
+@property (strong) CSSystemAudioNode *audioOutput;
 @property (assign) bool persistDevice;
+@property (strong) NSString *audioOutputDeviceUID;
 
 @end
 

@@ -38,7 +38,7 @@
                     </connections>
                 </textField>
                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gqU-gi-tWj">
-                    <rect key="frame" x="-3" y="151" width="109" height="20"/>
+                    <rect key="frame" x="-3" y="99" width="109" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Persist on exit" bezelStyle="regularSquare" imagePosition="trailing" controlSize="small" state="on" inset="2" id="eKG-XL-xsx">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -73,18 +73,47 @@
                     </popUpButtonCell>
                     <connections>
                         <binding destination="cNV-F2-BRe" name="content" keyPath="arrangedObjects" id="Njd-be-fAO"/>
-                        <binding destination="cNV-F2-BRe" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Njd-be-fAO" id="gzX-ra-5WR"/>
                         <binding destination="cNV-F2-BRe" name="contentValues" keyPath="arrangedObjects.key" previousBinding="gzX-ra-5WR" id="AWB-3K-3Ey"/>
+                        <binding destination="cNV-F2-BRe" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Njd-be-fAO" id="gzX-ra-5WR"/>
                         <binding destination="nwA-xG-m6e" name="selectedObject" keyPath="selection.pixelFormat" previousBinding="AWB-3K-3Ey" id="Raw-tR-Bk9"/>
                     </connections>
                 </popUpButton>
+                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mMq-73-3rJ">
+                    <rect key="frame" x="94" y="173" width="204" height="22"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="yL7-pw-YPP" id="304-p7-Gy5">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
+                        <menu key="menu" id="GRe-hY-qQw">
+                            <items>
+                                <menuItem title="Item 1" state="on" id="yL7-pw-YPP"/>
+                                <menuItem title="Item 2" id="sz6-qg-NMU"/>
+                                <menuItem title="Item 3" id="8gk-m1-kKV"/>
+                            </items>
+                        </menu>
+                    </popUpButtonCell>
+                    <connections>
+                        <binding destination="GXP-21-98B" name="content" keyPath="arrangedObjects" id="RPq-Ve-r9B"/>
+                        <binding destination="GXP-21-98B" name="contentValues" keyPath="arrangedObjects.name" previousBinding="RPq-Ve-r9B" id="LhQ-An-2CA"/>
+                        <binding destination="nwA-xG-m6e" name="selectedObject" keyPath="selection.audioOutput" previousBinding="LhQ-An-2CA" id="xIM-jC-Xf7"/>
+                    </connections>
+                </popUpButton>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J4e-QE-Dz5">
+                    <rect key="frame" x="-2" y="178" width="74" height="14"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Audio Output" id="f3R-qt-s4U">
+                        <font key="font" metaFont="controlContent" size="11"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <point key="canvasLocation" x="140" y="154"/>
         </customView>
         <dictionaryController objectClassName="_NSDictionaryControllerKeyValuePair" id="cNV-F2-BRe" userLabel="PixelFormatsController">
             <connections>
-                <binding destination="-2" name="contentDictionary" keyPath="self.pixelFormats" id="eUP-Tn-gEp"/>
                 <binding destination="-2" name="sortDescriptors" keyPath="self.formatSortDescriptors" id="gfW-Yl-5kV"/>
+                <binding destination="-2" name="contentDictionary" keyPath="self.pixelFormats" id="eUP-Tn-gEp"/>
             </connections>
         </dictionaryController>
         <objectController id="nwA-xG-m6e">
@@ -92,5 +121,10 @@
                 <binding destination="-2" name="contentObject" keyPath="self.serviceObj" id="jlu-iQ-kTU"/>
             </connections>
         </objectController>
+        <arrayController id="GXP-21-98B" userLabel="audioOutputsController">
+            <connections>
+                <binding destination="-2" name="contentArray" keyPath="self.audioOutputs" id="pj5-wR-hd9"/>
+            </connections>
+        </arrayController>
     </objects>
 </document>

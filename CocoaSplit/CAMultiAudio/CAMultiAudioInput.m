@@ -152,6 +152,11 @@
 {
     
 
+    if (self.graph.isSimple)
+    {
+        return YES;
+    }
+    
     if (!self.converterNode)
     {
         self.converterNode = [[CAMultiAudioConverter alloc] init];
@@ -226,6 +231,11 @@
 
 -(void)setupEffectsChain
 {
+    if (self.graph.isSimple)
+    {
+        return;
+    }
+    
     [self setupGraph];
     [super setupEffectsChain];
     [self setupDownmixer];
@@ -234,6 +244,11 @@
 
 -(void)removeEffectsChain
 {
+    if (self.graph.isSimple)
+    {
+        return;
+    }
+    
     [self teardownGraph];
     [super removeEffectsChain];
 }

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CSPcmPlayer.h"
 #import "CSOauth2Authenticator.h"
+#import "CSSystemAudioOutput.h"
+#import "CSSystemAudioNode.h"
 #import <JavaScriptCore/JavaScriptCore.h>
 
 
@@ -31,7 +33,8 @@
 -(JSValue *)runJavascript:(NSString *)script;
 -(NSString *)generateUUID;
 -(NSDate *)streamStartDate;
-
+-(NSArray *)audioOutputs;
+-(CSSystemAudioOutput *)systemAudioOutputForFormat:(AVAudioFormat *)audioFormat forDevice:(CSSystemAudioOutput *)device;
 
 
 @property (readonly) double currentFPS;

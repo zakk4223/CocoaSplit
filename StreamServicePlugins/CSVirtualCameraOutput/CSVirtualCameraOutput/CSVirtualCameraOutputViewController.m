@@ -7,6 +7,7 @@
 //
 
 #import "CSVirtualCameraOutputViewController.h"
+#import "CSPluginServices.h"
 
 @interface CSVirtualCameraOutputViewController ()
 
@@ -26,6 +27,19 @@
                       @"Component Y'CbCr 8-bit 4:2:2 (yuvs)": @(kCVPixelFormatType_422YpCbCr8_yuvs)
                       };
     self.formatSortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"key" ascending:YES]];
+    self.audioOutputs = [[CSPluginServices sharedPluginServices] audioOutputs];
+    if (self.serviceObj.audioOutputDeviceUID)
+    {
+        for (CSSystemAudioNode *aNode in self.audioOutputs)
+        {
+            if ([aNode.deviceUID isEqualToString:self.serviceObj.audioOutputDeviceUID])
+            {
+                self.serviceObj.audioOutput = aNode;
+                self.serviceObj.audioOutputDeviceUID = aNode.deviceUID;
+                break;
+            }
+        }
+    }
     
 }
 
