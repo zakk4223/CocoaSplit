@@ -37,17 +37,6 @@
                         <binding destination="nwA-xG-m6e" name="value" keyPath="selection.deviceName" id="EtI-IN-7b2"/>
                     </connections>
                 </textField>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gqU-gi-tWj">
-                    <rect key="frame" x="-3" y="99" width="109" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Persist on exit" bezelStyle="regularSquare" imagePosition="trailing" controlSize="small" state="on" inset="2" id="eKG-XL-xsx">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="controlContent" size="11"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="nwA-xG-m6e" name="value" keyPath="selection.persistDevice" id="NQb-Pv-c3h"/>
-                    </connections>
-                </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7bH-Sg-CoI">
                     <rect key="frame" x="-2" y="205" width="93" height="14"/>
                     <autoresizingMask key="autoresizingMask"/>
@@ -78,6 +67,15 @@
                         <binding destination="nwA-xG-m6e" name="selectedObject" keyPath="selection.pixelFormat" previousBinding="AWB-3K-3Ey" id="Raw-tR-Bk9"/>
                     </connections>
                 </popUpButton>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J4e-QE-Dz5">
+                    <rect key="frame" x="-2" y="178" width="74" height="14"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Audio Output" id="f3R-qt-s4U">
+                        <font key="font" metaFont="controlContent" size="11"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mMq-73-3rJ">
                     <rect key="frame" x="94" y="173" width="204" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -98,15 +96,17 @@
                         <binding destination="nwA-xG-m6e" name="selectedObject" keyPath="selection.audioOutput" previousBinding="LhQ-An-2CA" id="xIM-jC-Xf7"/>
                     </connections>
                 </popUpButton>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J4e-QE-Dz5">
-                    <rect key="frame" x="-2" y="178" width="74" height="14"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Audio Output" id="f3R-qt-s4U">
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gqU-gi-tWj">
+                    <rect key="frame" x="-3" y="151" width="173" height="20"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <buttonCell key="cell" type="check" title="Don't destroy camera on exit" bezelStyle="regularSquare" imagePosition="trailing" controlSize="small" state="on" inset="2" id="eKG-XL-xsx">
+                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="controlContent" size="11"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
+                    </buttonCell>
+                    <connections>
+                        <binding destination="nwA-xG-m6e" name="value" keyPath="selection.persistDevice" id="NQb-Pv-c3h"/>
+                    </connections>
+                </button>
             </subviews>
             <point key="canvasLocation" x="140" y="154"/>
         </customView>
