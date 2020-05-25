@@ -14,6 +14,12 @@
 @synthesize persistOnDisconnect = _persistOnDisconnect;
 
 
+
++(bool)isInstalled
+{
+    return [NSFileManager.defaultManager fileExistsAtPath:CSVC_DAL_PATH isDirectory:NULL];
+}
+
 -(void)connectToAssistant
 {
     NSXPCInterface *assistantInterface = [NSXPCInterface interfaceWithProtocol:@protocol(CSVirtualCameraProtocol)];

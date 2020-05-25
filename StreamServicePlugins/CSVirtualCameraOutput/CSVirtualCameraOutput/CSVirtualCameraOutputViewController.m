@@ -41,6 +41,48 @@
         }
     }
     
+    if (self.descriptionTextField)
+    {
+        self.descriptionTextField.allowsEditingTextAttributes = YES;
+        self.descriptionTextField.selectable = YES;
+        
+        self.descriptionTextField.attributedStringValue = self.descriptionText;
+    }
+    
 }
 
+-(bool)virtualCameraInstalled
+{
+    return [CSVirtualCameraDevice isInstalled];
+}
+
+
+-(NSAttributedString *)descriptionText
+{
+        
+    
+    NSMutableAttributedString *urlStr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithUTF8String:"https://www.cocoasplit.com/releases/CSVirtualCamera"]];
+
+
+    NSString *availableStr = [NSString stringWithFormat:@"CocoaSplit Virtual Camera is not installed. You can download the latest release from "];
+    NSMutableAttributedString *retStr = [[NSMutableAttributedString alloc] initWithString:availableStr];
+    
+    
+    
+    NSRange range = NSMakeRange(0, urlStr.length);
+    
+    [urlStr beginEditing];
+    
+    NSURL *URL = [NSURL URLWithString:[NSString stringWithUTF8String:"https://www.cocoasplit.com/releases/CSVirtualCamera"]];
+    
+    [urlStr addAttribute:NSLinkAttributeName value:URL range:range];
+    
+    [urlStr addAttribute:NSForegroundColorAttributeName value:[NSColor blueColor] range:range];
+    [urlStr addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInt:NSUnderlineStyleSingle] range:range];
+    [urlStr endEditing];
+    
+    [retStr appendAttributedString:urlStr];
+    
+    return retStr;
+}
 @end

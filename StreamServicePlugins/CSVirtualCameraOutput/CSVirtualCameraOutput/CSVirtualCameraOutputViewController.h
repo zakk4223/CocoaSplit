@@ -19,7 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSDictionary *pixelFormats;
 @property (strong) NSArray *formatSortDescriptors;
 @property (strong) NSArray *audioOutputs;
-
+@property (readonly) bool virtualCameraInstalled;
+@property (readonly) NSMutableAttributedString *descriptionText;
+@property (weak) IBOutlet NSTextField *descriptionTextField;
 @end
 
 NS_ASSUME_NONNULL_END
