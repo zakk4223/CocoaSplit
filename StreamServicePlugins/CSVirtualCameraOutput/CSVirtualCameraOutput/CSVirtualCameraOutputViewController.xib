@@ -7,6 +7,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="CSVirtualCameraOutputViewController">
             <connections>
+                <outlet property="descriptionTextField" destination="1tO-ai-6lT" id="BiE-Ds-OIC"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -16,97 +17,122 @@
             <rect key="frame" x="0.0" y="0.0" width="480" height="272"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xog-xk-Nf6">
-                    <rect key="frame" x="-2" y="236" width="90" height="14"/>
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QRN-Kj-WTo">
+                    <rect key="frame" x="0.0" y="154" width="295" height="98"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7bH-Sg-CoI">
+                            <rect key="frame" x="-2" y="51" width="93" height="14"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Output Format" id="e3P-XR-5y7">
+                                <font key="font" metaFont="message" size="11"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gqU-gi-tWj">
+                            <rect key="frame" x="-3" y="-3" width="173" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="check" title="Don't destroy camera on exit" bezelStyle="regularSquare" imagePosition="trailing" controlSize="small" state="on" inset="2" id="eKG-XL-xsx">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="message" size="11"/>
+                            </buttonCell>
+                            <connections>
+                                <binding destination="nwA-xG-m6e" name="value" keyPath="selection.persistDevice" id="NQb-Pv-c3h"/>
+                            </connections>
+                        </button>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xog-xk-Nf6">
+                            <rect key="frame" x="-2" y="82" width="90" height="14"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Camera Name" id="7aA-Rb-fl7">
+                                <font key="font" metaFont="message" size="11"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V8o-P0-sOm">
+                            <rect key="frame" x="94" y="79" width="201" height="19"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Oor-H9-ckR">
+                                <font key="font" metaFont="message" size="11"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <connections>
+                                <binding destination="nwA-xG-m6e" name="value" keyPath="selection.deviceName" id="EtI-IN-7b2"/>
+                            </connections>
+                        </textField>
+                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J4e-QE-Dz5">
+                            <rect key="frame" x="-2" y="24" width="74" height="14"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Audio Output" id="f3R-qt-s4U">
+                                <font key="font" metaFont="message" size="11"/>
+                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mMq-73-3rJ">
+                            <rect key="frame" x="94" y="19" width="204" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="yL7-pw-YPP" id="304-p7-Gy5">
+                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="message" size="11"/>
+                                <menu key="menu" id="GRe-hY-qQw">
+                                    <items>
+                                        <menuItem title="Item 1" state="on" id="yL7-pw-YPP"/>
+                                        <menuItem title="Item 2" id="sz6-qg-NMU"/>
+                                        <menuItem title="Item 3" id="8gk-m1-kKV"/>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                            <connections>
+                                <binding destination="GXP-21-98B" name="content" keyPath="arrangedObjects" id="RPq-Ve-r9B"/>
+                                <binding destination="GXP-21-98B" name="contentValues" keyPath="arrangedObjects.name" previousBinding="RPq-Ve-r9B" id="LhQ-An-2CA"/>
+                                <binding destination="nwA-xG-m6e" name="selectedObject" keyPath="selection.audioOutput" previousBinding="LhQ-An-2CA" id="xIM-jC-Xf7"/>
+                            </connections>
+                        </popUpButton>
+                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kx6-W9-fUt">
+                            <rect key="frame" x="94" y="45" width="204" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="jHh-pz-ac7" id="xWr-KO-x32">
+                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="message" size="11"/>
+                                <menu key="menu" id="oNd-Gf-6Ss">
+                                    <items>
+                                        <menuItem title="Item 1" state="on" id="jHh-pz-ac7"/>
+                                        <menuItem title="Item 2" id="EfX-Bk-Uxg"/>
+                                        <menuItem title="Item 3" id="bJU-ex-fZP"/>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                            <connections>
+                                <binding destination="cNV-F2-BRe" name="content" keyPath="arrangedObjects" id="Njd-be-fAO"/>
+                                <binding destination="cNV-F2-BRe" name="contentValues" keyPath="arrangedObjects.key" previousBinding="gzX-ra-5WR" id="AWB-3K-3Ey"/>
+                                <binding destination="cNV-F2-BRe" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Njd-be-fAO" id="gzX-ra-5WR"/>
+                                <binding destination="nwA-xG-m6e" name="selectedObject" keyPath="selection.pixelFormat" previousBinding="AWB-3K-3Ey" id="Raw-tR-Bk9"/>
+                            </connections>
+                        </popUpButton>
+                    </subviews>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.virtualCameraInstalled" id="2Wn-6J-hNg">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </customView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1tO-ai-6lT">
+                    <rect key="frame" x="18" y="20" width="444" height="101"/>
                     <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Camera Name" id="7aA-Rb-fl7">
-                        <font key="font" metaFont="controlContent" size="11"/>
+                    <textFieldCell key="cell" controlSize="small" title="Label" id="j4W-RQ-FK9">
+                        <font key="font" metaFont="message" size="11"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
-                </textField>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V8o-P0-sOm">
-                    <rect key="frame" x="94" y="233" width="201" height="19"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="Oor-H9-ckR">
-                        <font key="font" metaFont="controlContent" size="11"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
                     <connections>
-                        <binding destination="nwA-xG-m6e" name="value" keyPath="selection.deviceName" id="EtI-IN-7b2"/>
+                        <binding destination="-2" name="hidden" keyPath="self.virtualCameraInstalled" id="Ozl-Ka-KsO"/>
                     </connections>
                 </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7bH-Sg-CoI">
-                    <rect key="frame" x="-2" y="205" width="93" height="14"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Output Format" id="e3P-XR-5y7">
-                        <font key="font" metaFont="controlContent" size="11"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kx6-W9-fUt">
-                    <rect key="frame" x="94" y="199" width="204" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="jHh-pz-ac7" id="xWr-KO-x32">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="controlContent" size="11"/>
-                        <menu key="menu" id="oNd-Gf-6Ss">
-                            <items>
-                                <menuItem title="Item 1" state="on" id="jHh-pz-ac7"/>
-                                <menuItem title="Item 2" id="EfX-Bk-Uxg"/>
-                                <menuItem title="Item 3" id="bJU-ex-fZP"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <binding destination="cNV-F2-BRe" name="content" keyPath="arrangedObjects" id="Njd-be-fAO"/>
-                        <binding destination="cNV-F2-BRe" name="contentValues" keyPath="arrangedObjects.key" previousBinding="gzX-ra-5WR" id="AWB-3K-3Ey"/>
-                        <binding destination="cNV-F2-BRe" name="contentObjects" keyPath="arrangedObjects.value" previousBinding="Njd-be-fAO" id="gzX-ra-5WR"/>
-                        <binding destination="nwA-xG-m6e" name="selectedObject" keyPath="selection.pixelFormat" previousBinding="AWB-3K-3Ey" id="Raw-tR-Bk9"/>
-                    </connections>
-                </popUpButton>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="J4e-QE-Dz5">
-                    <rect key="frame" x="-2" y="178" width="74" height="14"/>
-                    <autoresizingMask key="autoresizingMask"/>
-                    <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Audio Output" id="f3R-qt-s4U">
-                        <font key="font" metaFont="controlContent" size="11"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mMq-73-3rJ">
-                    <rect key="frame" x="94" y="173" width="204" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="yL7-pw-YPP" id="304-p7-Gy5">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="controlContent" size="11"/>
-                        <menu key="menu" id="GRe-hY-qQw">
-                            <items>
-                                <menuItem title="Item 1" state="on" id="yL7-pw-YPP"/>
-                                <menuItem title="Item 2" id="sz6-qg-NMU"/>
-                                <menuItem title="Item 3" id="8gk-m1-kKV"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <binding destination="GXP-21-98B" name="content" keyPath="arrangedObjects" id="RPq-Ve-r9B"/>
-                        <binding destination="GXP-21-98B" name="contentValues" keyPath="arrangedObjects.name" previousBinding="RPq-Ve-r9B" id="LhQ-An-2CA"/>
-                        <binding destination="nwA-xG-m6e" name="selectedObject" keyPath="selection.audioOutput" previousBinding="LhQ-An-2CA" id="xIM-jC-Xf7"/>
-                    </connections>
-                </popUpButton>
-                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gqU-gi-tWj">
-                    <rect key="frame" x="-3" y="151" width="173" height="20"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Don't destroy camera on exit" bezelStyle="regularSquare" imagePosition="trailing" controlSize="small" state="on" inset="2" id="eKG-XL-xsx">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="controlContent" size="11"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="nwA-xG-m6e" name="value" keyPath="selection.persistDevice" id="NQb-Pv-c3h"/>
-                    </connections>
-                </button>
             </subviews>
             <point key="canvasLocation" x="140" y="154"/>
         </customView>

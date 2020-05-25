@@ -28,7 +28,7 @@
         self.cameraDevice.name = self.deviceName;
         
         self.cameraDevice.persistOnDisconnect = self.persistDevice;
-        self.cameraDevice.deviceUID = [NSString stringWithFormat:@"0x145424105986211e"];
+        self.cameraDevice.deviceUID = self.deviceName;
         self.cameraDevice.frameRate = 1.0f/CMTimeGetSeconds(frameData.videoDuration);
         self.cameraDevice.width = CVPixelBufferGetWidth(useImage);
         self.cameraDevice.height = CVPixelBufferGetHeight(useImage);

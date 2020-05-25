@@ -11,6 +11,8 @@
 #import <IOSurface/IOSurfaceObjC.h>
 #import <VideoToolbox/VideoToolbox.h>
 
+#define CSVC_DAL_PATH @"/Library/CoreMediaIO/Plug-Ins/DAL/CSVirtualCamera.plugin"
+
 NS_ASSUME_NONNULL_BEGIN
 
 
@@ -33,6 +35,10 @@ NS_ASSUME_NONNULL_BEGIN
     
 }
 
+/*
+ Is CSVirtualCamera installed? This just checks for the DAL plugin
+ */
++(bool)isInstalled;
 
 @property (strong) NSString *name;
 @property (strong) NSString *deviceUID;
